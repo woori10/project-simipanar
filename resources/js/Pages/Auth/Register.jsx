@@ -15,14 +15,15 @@ export default function Register() {
         no_telp:'',
         email: '',
         password: '',
-        password_confirmation: '',
+        // password_confirmation: '',
     });
 
     const submit = (e) => {
         e.preventDefault();
 
         post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
+            onFinish: () => reset('password'),
+            // onFinish: () => reset('password', 'password_confirmation'),
         });
     };
 
@@ -154,7 +155,7 @@ export default function Register() {
                             <InputError message={errors.password} className="mt-2" />
                         </div>
 
-                        <div className="mt-4">
+                        {/* <div className="mt-4">
                             <InputLabel
                                 htmlFor="password_confirmation"
                                 style={{ color: '#00275d' }}
@@ -179,7 +180,7 @@ export default function Register() {
                                 message={errors.password_confirmation}
                                 className="mt-2"
                             />
-                        </div>
+                        </div> */}
 
                         <div className="mt-4 flex-col items-center justify-center">
                             <PrimaryButton className="w-full py-2.5 items-center justify-center"  disabled={processing}>

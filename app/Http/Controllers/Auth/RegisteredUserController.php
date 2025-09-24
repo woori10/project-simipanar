@@ -36,7 +36,8 @@ class RegisteredUserController extends Controller
             'satker' => 'required|string',
             'nip' => 'required|string|max:18|unique:users',
             'no_telp' => 'required|string|max:20',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', Rules\Password::defaults()],
+            // 'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([

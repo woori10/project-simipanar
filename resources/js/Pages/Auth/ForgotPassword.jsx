@@ -25,6 +25,10 @@ export default function ForgotPassword({ status }) {
                 <img className="w-16 h-auto" src={logo} alt="Logo Kemenkeu" />
             </div>
 
+            <h1 className="text-2xl font-extrabold text-main-blue text-center mb-6">
+                SiMiPaNar
+            </h1>
+
             <div className="mb-4 text-sm text-center text-gray-600">
                 Forgot your password? No problem. Just let us know your email
                 address and we will email you a password reset link that will

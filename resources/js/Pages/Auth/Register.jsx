@@ -39,10 +39,10 @@ export default function Register() {
                         <img className="w-16 h-auto" src={logo} alt="Logo Kemenkeu" />
                     </div>
 
-                    <div className="flex justify-start items-center my-4">
+                    <div className="flex justify-center items-center my-4">
                         <h1 className="text-2xl font-bold"
                             style={{ color: '#00275d' }}>
-                            Selamat Datang di SiMiPaNar
+                            Selamat Datang di SIMIPANAR
                         </h1>
                     </div>
 

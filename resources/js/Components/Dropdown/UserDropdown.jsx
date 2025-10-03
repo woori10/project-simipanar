@@ -1,7 +1,8 @@
-import { Link } from '@inertiajs/react';
-import { useState } from "react";
 import { Dropdown } from '@/Components/UI/Dropdown/Dropdown';
 import DropdownItem from '@/Components/UI/Dropdown/DropdownItem';
+import { Link } from '@inertiajs/react';
+import { useState } from "react";
+import owner from '../../../images/kurpet.jpg';
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,12 +20,12 @@ export default function UserDropdown() {
         onClick={toggleDropdown}
         className="flex items-center text-gray-700 dropdown-toggle dark:text-gray-400"
       >
-        <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-          <img src="/images/user/owner.jpg" alt="User" />
+        <span className="mr-3 overflow-hidden rounded-2xl h-11 w-11">
+          <img src={owner} alt="User" />
         </span>
 
-        <span className="block mr-1 font-medium text-theme-sm">Musharof</span>
-        <svg
+        {/* <span className="block mr-1 font-medium text-theme-sm">Musharof</span> */}
+        {/* <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
           }`}
@@ -41,7 +42,7 @@ export default function UserDropdown() {
             strokeLinecap="round"
             strokeLinejoin="round"
           />
-        </svg>
+        </svg> */}
       </button>
 
       <Dropdown

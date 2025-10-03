@@ -17,6 +17,7 @@ export default {
             },
             colors: {
             'main-blue': '#00275d',
+            'main-yellow': '#FFC807',
             'underline-blue': '#1E4AE9',
                 brand : {
                     25: '#f2f7ff',

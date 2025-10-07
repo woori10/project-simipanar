@@ -5,8 +5,6 @@ import {
     FAQIcon,
     ModulDiklatIcon,
     ProsedurKerjaIcon,
-    PusatKeluhanIcon,
-    UserCircleIcon,
     VideoTutorialIcon
 } from "@icons";
 import { Link, usePage } from '@inertiajs/react';
@@ -16,11 +14,6 @@ import logo from '../../../images/bea-cukai.png';
 
 const navItems = [
   {
-    // icon: <GridIcon />,
-    // name: "Beranda",
-    // subItems: [{ name: "Ecommerce", path: "/", pro: false }],
-  },
-  {
     icon: <BerandaIcon />,
     name: "Beranda",
     path: "/",
@@ -28,46 +21,31 @@ const navItems = [
   {
     icon: <ProsedurKerjaIcon />,
     name: "Prosedur Kerja",
-    path: "/",
+    path: "/user/prosedur-kerja",
   },
   {
     icon: <ModulDiklatIcon />,
     name: "Modul Diklat",
-    path: "/",
+    path: "/user/modul-diklat",
   },
     {
     icon: <FAQIcon />,
     name: "FAQ",
-    path: "/",
+    path: "/user/faq",
   },
-    {
-    icon: <PusatKeluhanIcon />,
-    name: "Pusat Keluhan",
-    path: "/",
-  },
+//     {
+//     icon: <PusatKeluhanIcon />,
+//     name: "Pusat Keluhan",
+//     path: "/",
+//   },
   {
     name: "Video Tutorial",
     icon: <VideoTutorialIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
-  },
-    {
-    icon: <UserCircleIcon />,
-    name: "User Profile",
-    path: "/profile",
-  },
-//   {
-//     name: "Tables",
-//     icon: <TableIcon />,
-//     subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-//   },
-//   {
-//     name: "Pages",
-//     icon: <PageIcon />,
-//     subItems: [
-//       { name: "Blank Page", path: "/blank", pro: false },
-//       { name: "404 Error", path: "/error-404", pro: false },
-//     ],
-//   },
+    subItems: [
+        {name: "IonScan", path: "/video-tutorial/ion-scan", pro: false},
+        {name: "Hamzat", path: "/video-tutorial/hamzat", pro: false},
+        ],
+    },
 ];
 
 const othersItems = [
@@ -293,22 +271,19 @@ const AppSidebar = () => {
   return (
     <aside
       className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200
-        ${
-          isExpanded || isMobileOpen
-            ? "w-[290px]"
-            : isHovered
-            ? "w-[290px]"
-            : "w-[90px]"
-        }
+        ${isMobileOpen ? "w-full" : "w-0"}   // full screen di mobile
+        ${isExpanded || isHovered ? "lg:w-[290px]" : "lg:w-[90px]"}  // desktop
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
-        lg:translate-x-0`}
+        lg:translate-x-0
+        `}
       onMouseEnter={() => !isExpanded && setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
         className={`py-6 flex justify-center`}
       >
-        <Link href="/">
+        {/* Logo */}
+        <Link href="/user/dashboard">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <img

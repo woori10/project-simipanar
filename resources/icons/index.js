@@ -1,9 +1,11 @@
 import BerandaIcon from "./beranda.svg?react";
 import BoxCubeIcon from "./box-cube.svg?react";
+import BoxIconLine from "./box-line.svg?react";
 import CalenderIcon from "./calendar.svg?react";
 import ChevronDownIcon from "./chevron-down.svg?react";
 import FAQIcon from "./FAQ.svg?react";
 import GridIcon from "./grid.svg?react";
+import GroupIcon from "./group.svg?react";
 import HorizontalIcon from "./horizontal-dots.svg?react";
 import ListIcon from "./list.svg?react";
 import ModulDiklatIcon from "./modul_diklat.svg?react";
@@ -16,11 +18,10 @@ import TableIcon from "./table.svg?react";
 import UserCircleIcon from "./user-circle.svg?react";
 import VideoTutorialIcon from "./video_tutorial.svg?react";
 
+
 export {
-    BerandaIcon, BoxCubeIcon,
-    CalenderIcon,
-    ChevronDownIcon, FAQIcon, GridIcon,
-    HorizontalIcon,
+    BerandaIcon, BoxCubeIcon, BoxIconLine, CalenderIcon,
+    ChevronDownIcon, FAQIcon, GridIcon, GroupIcon, HorizontalIcon,
     ListIcon, ModulDiklatIcon, PageIcon, PieChartIcon, PlugInIcon, ProsedurKerjaIcon, PusatKeluhanIcon, TableIcon,
     UserCircleIcon,
     VideoTutorialIcon

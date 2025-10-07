@@ -5,7 +5,7 @@ import { Link } from '@inertiajs/react';
 import { useEffect, useRef, useState } from "react";
 import logo from '../../../images/bea-cukai.png';
 
-const AppHeader = () => {
+const AppHeader = ({user}) => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
 
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
@@ -194,7 +194,7 @@ const AppHeader = () => {
             {/* <!-- Notification Menu Area --> */}
           </div>
           {/* <!-- User Area --> */}
-          <UserDropdown />
+          <UserDropdown user={user}/>
         </div>
       </div>
     </header>

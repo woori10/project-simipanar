@@ -44,12 +44,12 @@ export default function Login({ status, canResetPassword }) {
                 </div>
 
                 <div className="flex flex-col justify-center px-8 md:px-16">
-                    <div className="flex justify-center mb-4">
+                    <div className="flex justify-center mb-2">
                         <img className="w-16 h-auto" src={logo} alt="Logo Kemenkeu" />
                     </div>
 
-                    <h1 className="text-2xl font-extrabold text-main-blue text-center">
-                        SiMiPaNar
+                    <h1 className="text-2xl mb-4 font-extrabold text-main-blue text-center">
+                        SIMIPANAR
                     </h1>
 
                     <h2 className="text-2xl font-medium text-main-blue text-center mb-4">

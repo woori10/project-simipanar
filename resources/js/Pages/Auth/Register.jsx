@@ -40,8 +40,7 @@ export default function Register() {
                     </div>
 
                     <div className="flex justify-center items-center my-4">
-                        <h1 className="text-2xl font-bold"
-                            style={{ color: '#00275d' }}>
+                        <h1 className="text-2xl font-bold text-main-blue">
                             Selamat Datang di SIMIPANAR
                         </h1>
                     </div>
@@ -187,7 +186,7 @@ export default function Register() {
                                 Register
                             </PrimaryButton>
 
-                            <div className="mt-2 flex-start text-gray-600 rounded-md text-sm" >
+                            <div className="mt-2 flex justify-center items-center text-gray-600 rounded-md text-sm" >
                                 Sudah punya akun?
                                 <Link href={route('login')}
                                 className=" underline ml-1 hover:text-red-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"

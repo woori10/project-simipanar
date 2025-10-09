@@ -1,5 +1,5 @@
 import ProsedurKerjaCard from '@/Components/Card/ProsedurKerjaCard';
-import AppLayout from '@/Components/Layout/AppLayout';
+import AppLayout from '@/Components/Layout/UserLayout';
 
 
 export default function ProsedurKerja() {

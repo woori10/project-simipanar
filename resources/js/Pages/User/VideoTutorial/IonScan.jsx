@@ -1,5 +1,5 @@
 import VideoTutorialCard from '@/Components/Card/VideoTutorialCard';
-import AppLayout from '@/Components/Layout/AppLayout';
+import AppLayout from '@/Components/Layout/UserLayout';
 
 export default function IonScan() {
   return (

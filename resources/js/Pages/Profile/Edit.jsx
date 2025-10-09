@@ -1,5 +1,5 @@
 // import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import AppLayout from '@/Components/Layout/AppLayout';
+import AppLayout from '@/Components/Layout/UserLayout';
 import { Head, Link } from '@inertiajs/react';
 import owner from '../../../images/kurpet.jpg';
 

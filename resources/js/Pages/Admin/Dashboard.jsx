@@ -1,10 +1,16 @@
-import AppLayout from '@/Layouts/AppLayout';
+import AppLayout from '@/Components/Layout/AdminLayout';
+import { Head } from '@inertiajs/react';
 
-export default function Dashboard() {
+export default function Dashboard({ title }) {
   return (
     <AppLayout>
-      <h1 className="text-xl font-bold">Admin Dashboard</h1>
-      {/* konten khusus admin */}
+        <div className="p-6">
+      <Head title={title} />
+      <h1 className="text-2xl font-bold text-gray-800">Welcome to Admin Dashboard</h1>
+      <p className="text-gray-600 mt-2">Hanya admin yang bisa melihat halaman ini.</p>
+    </div>
     </AppLayout>
+
+
   );
 }

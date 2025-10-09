@@ -1,4 +1,4 @@
-import AppLayout from '@/Components/Layout/AppLayout';
+import AppLayout from '@/Components/Layout/UserLayout';
 import { ChevronDownIcon } from "@icons";
 import { useState } from "react";
 

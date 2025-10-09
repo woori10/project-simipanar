@@ -1,5 +1,5 @@
 import AppHeader from '@/Components/Layout/AppHeader';
-import AppSidebar from '@/Components/Sidebar/AppSidebar';
+import AppSidebar from '@/Components/Sidebar/UserSidebar';
 import { SidebarProvider, useSidebar } from '@/Components/Sidebar/SidebarContext';
 import { usePage } from '@inertiajs/react';
 

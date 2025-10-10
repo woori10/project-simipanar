@@ -69,17 +69,33 @@ Route::get('/user/video-tutorial', function () {
     return Inertia::render('User/ModulDiklat');
 })->middleware(['auth', 'verified'])->name('user.modulDiklat');
 
+Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return Inertia::render('Admin/Dashboard');
+    })->name('admin.dashboard');
 
+    Route::get('/admin/kelola-prosedur-kerja', function () {
+        return Inertia::render('Admin/ProsedurKerja');
+    })->name('admin.prosedurKerja');
 
+    Route::get('/admin/kelola-modul-diklat', function () {
+        return Inertia::render('Admin/ModulDiklat');
+    })->name('admin.modulDiklat');
 
+    Route::get('/admin/kelola-faq', function () {
+        return Inertia::render('Admin/Faq');
+    })->name('admin.faq');
 
-Route::get('/admin', function () {
-    return Inertia::render('Admin/Dashboard');
+    Route::get('/admin/kelola-video-tutorial', function () {
+        return Inertia::render('Admin/VideoTutorial');
+    })->name('admin.videoTutorial');
+
+    Route::get('/admin/kelola-user', function () {
+        return Inertia::render('Admin/User');
+    })->name('admin.user');
+
 });
 
-Route::get('/user', function () {
-    return Inertia::render('User/Dashboard');
-});
 
 
 require __DIR__.'/auth.php';

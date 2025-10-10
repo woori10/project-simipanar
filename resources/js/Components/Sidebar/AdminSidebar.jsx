@@ -17,32 +17,32 @@ const navItems = [
   {
     icon: <BerandaIcon />,
     name: "Beranda",
-    path: "/",
+    path: "/admin/dashboard",
   },
   {
     icon: <ProsedurKerjaIcon />,
     name: "Prosedur Kerja",
-    path: "/admin/prosedur-kerja",
+    path: "/admin/kelola-prosedur-kerja",
   },
   {
     icon: <ModulDiklatIcon />,
     name: "Modul Diklat",
-    path: "/admin/modul-diklat",
+    path: "/admin/kelola-modul-diklat",
   },
     {
     icon: <FAQIcon />,
     name: "FAQ",
-    path: "/admin/faq",
+    path: "/admin/kelola-faq",
   },
   {
     icon: <VideoTutorialIcon />,
     name: "Video Tutorial",
-    path: "/admin/video-tutorial",
+    path: "/admin/kelola-video-tutorial",
   },
   {
     icon: <UserCircleIcon />,
     name: "User",
-    path: "/admin/user",
+    path: "/admin/kelola-user",
   }
 ];
 

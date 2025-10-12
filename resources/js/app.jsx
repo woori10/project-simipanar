@@ -1,4 +1,6 @@
 // import '../css/app.css';
+import 'flowbite';
+import 'flowbite-react';
 import '../css/index.css';
 import './bootstrap';
 

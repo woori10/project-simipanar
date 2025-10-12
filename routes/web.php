@@ -74,25 +74,70 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
         return Inertia::render('Admin/Dashboard');
     })->name('admin.dashboard');
 
+
+    // Routing Admin Prosedur Kerja
+
     Route::get('/admin/kelola-prosedur-kerja', function () {
-        return Inertia::render('Admin/ProsedurKerja');
+        return Inertia::render('Admin/ProsedurKerja/ProsedurKerjaMain');
     })->name('admin.prosedurKerja');
 
+    Route::get('/admin/kelola-prosedur-kerja/tambah-data', function () {
+        return Inertia::render('Admin/ProsedurKerja/ProsedurKerjaForm', [
+            'title' => 'Tambah Prosedur Kerja',
+        ]);
+    })->name('admin.prosedurKerja.create');
+
+
+    // Routing Admin Modul Diklat
+
     Route::get('/admin/kelola-modul-diklat', function () {
-        return Inertia::render('Admin/ModulDiklat');
+        return Inertia::render('Admin/ModulDiklat/ModulDiklatMain');
     })->name('admin.modulDiklat');
 
+    Route::get('/admin/kelola-modul-diklat/tambah-data', function () {
+        return Inertia::render('Admin/ModulDiklat/ModulDiklatForm', [
+            'title' => 'Tambah Modul Diklat',
+        ]);
+    })->name('admin.modulDiklat.create');
+
+
+    // Routing Admin FAQ
+
     Route::get('/admin/kelola-faq', function () {
-        return Inertia::render('Admin/Faq');
+        return Inertia::render('Admin/Faq/FaqMain');
     })->name('admin.faq');
 
+    Route::get('/admin/kelola-faq/tambah-data', function () {
+        return Inertia::render('Admin/Faq/FaqForm', [
+            'title' => 'Tambah Faq',
+        ]);
+    })->name('admin.faq.create');
+
+
+    // Routing Admin Video Tutorial
+
     Route::get('/admin/kelola-video-tutorial', function () {
-        return Inertia::render('Admin/VideoTutorial');
+        return Inertia::render('Admin/VideoTutorial/VideoTutorialMain');
     })->name('admin.videoTutorial');
 
+    Route::get('/admin/kelola-video-tutorial/tambah-data', function () {
+        return Inertia::render('Admin/VideoTutorial/VideoTutorialForm', [
+            'title' => 'Tambah Video',
+        ]);
+    })->name('admin.videoTutorial.create');
+
+
+    // Routing Admin User
+
     Route::get('/admin/kelola-user', function () {
-        return Inertia::render('Admin/User');
+        return Inertia::render('Admin/User/UserMain');
     })->name('admin.user');
+
+    Route::get('/admin/kelola-user/tambah-data', function () {
+        return Inertia::render('Admin/User/UserForm', [
+            'title' => 'Tambah User',
+        ]);
+    })->name('admin.user.create');
 
 });
 

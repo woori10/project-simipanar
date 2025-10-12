@@ -12,10 +12,10 @@ export default function VideoTutorialCard() {
             <div className="text-center mt-5">
                 <div>
                     <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-                    SOP Karyawan Baru
+                    Video Baru
                     </h4>
                     <span className="text-sm text-gray-500 dark:text-gray-400">
-                    Halo
+                    Siapa yaho
                     </span>
                 </div>
             </div>

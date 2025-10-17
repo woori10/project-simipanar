@@ -53,7 +53,7 @@ export default function Register() {
                                 id="name"
                                 name="name"
                                 value={data.name}
-                                className="mt-1 block w-full h-10"
+                                className="mt-1 block w-full h-10 text-gray-500"
                                 autoComplete="name"
                                 isFocused={true}
                                 onChange={(e) => setData('name', e.target.value)}
@@ -71,7 +71,7 @@ export default function Register() {
                                 id="nip"
                                 name="nip"
                                 value={data.nip}
-                                className="mt-1 block w-full h-10"
+                                className="mt-1 block w-full h-10 text-gray-500"
                                 autoComplete="nip"
                                 isFocused={true}
                                 onChange={(e) => setData('nip', e.target.value)}
@@ -89,7 +89,7 @@ export default function Register() {
                                 id="satker"
                                 name="satker"
                                 value={data.satker}
-                                className="mt-1 block w-full h-10"
+                                className="mt-1 block w-full h-10 text-gray-500"
                                 autoComplete="satker"
                                 isFocused={true}
                                 onChange={(e) => setData('satker', e.target.value)}
@@ -108,7 +108,7 @@ export default function Register() {
                                 type="email"
                                 name="email"
                                 value={data.email}
-                                className="mt-1 block w-full h-10"
+                                className="mt-1 block w-full h-10 text-gray-500"
                                 autoComplete="username"
                                 onChange={(e) => setData('email', e.target.value)}
                                 placeholder="Masukkan Email"
@@ -126,7 +126,7 @@ export default function Register() {
                                 type="tel"
                                 name="No Telp"
                                 value={data.no_telp}
-                                className="mt-1 block w-full h-10"
+                                className="mt-1 block w-full h-10 text-gray-500"
                                 autoComplete="no_telp"
                                 onChange={(e) => setData('no_telp', e.target.value)}
                                 placeholder="Masukkan Nomor Telpon"
@@ -144,7 +144,7 @@ export default function Register() {
                                 type="password"
                                 name="password"
                                 value={data.password}
-                                className="mt-1 block w-full h-10"
+                                className="mt-1 block w-full h-10 text-gray-500"
                                 autoComplete="new-password"
                                 onChange={(e) => setData('password', e.target.value)}
                                 placeholder="Masukkan Password"

@@ -65,7 +65,7 @@ export default function Login({ status, canResetPassword }) {
                             type="text"
                             name="nip"
                             value={data.nip}
-                            className="mt-1 block w-full h-10 px-3"
+                            className="mt-1 block w-full h-10 px-3 text-gray-500"
                             autoComplete="nip"
                             placeholder="Masukkan NIP"
                             onChange={(e) => setData('nip', e.target.value)}
@@ -81,7 +81,7 @@ export default function Login({ status, canResetPassword }) {
                             type="password"
                             name="password"
                             value={data.password}
-                            className="mt-1 block w-full h-10 px-3"
+                            className="mt-1 block w-full h-10 px-3 text-gray-500"
                             autoComplete="current-password"
                             placeholder="Masukkan Password"
                             onChange={(e) => setData('password', e.target.value)}

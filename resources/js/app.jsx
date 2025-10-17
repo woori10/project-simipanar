@@ -4,11 +4,13 @@ import 'flowbite-react';
 import '../css/index.css';
 import './bootstrap';
 
+// import { InertiaProgress } from '@inertiajs/progress';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 
 const appName = import.meta.env.VITE_APP_NAME || 'SIMIPANAR';
+// InertiaProgress.init({ showSpinner: false });
 
 createInertiaApp({
     title: (title) => `${title} ${appName}`,
@@ -22,7 +24,7 @@ createInertiaApp({
 
         root.render(<App {...props} />);
     },
-    progress: {
-        color: '#4B5563',
-    },
+    // progress: {
+    //     color: '#4B5563',
+    // },
 });

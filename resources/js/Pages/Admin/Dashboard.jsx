@@ -113,7 +113,7 @@ export default function Dashboard({ title }) {
             </div>
         </div>
 
-        <h1 className="text-lg text-main-blue font-extrabold">Baru saja dikunjungi</h1>
+        <h1 className="text-lg text-main-blue font-extrabold">Baru saja Mengunjungi</h1>
         <div className= "py-4 grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6 lg:grid-cols-5">
             <UserCard />
             <UserCard />

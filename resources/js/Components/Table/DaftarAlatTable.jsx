@@ -12,19 +12,19 @@ import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 const tableData = [
   {
     id: 1,
-    pertanyaan: "Bagaimana cara menggunakan aplikasi?",
-    jawaban: "Anda dapat login dan memilih menu utama sesuai kebutuhan.",
+    nama_alat: "Bagaimana cara menggunakan aplikasi?",
+    gambar: null,
     tanggal: "2025-10-10",
   },
   {
     id: 2,
-    pertanyaan: "Bagaimana cara reset password?",
-    jawaban: "Klik ‘Lupa Password’ di halaman login dan ikuti langkah-langkahnya.",
+    nama_alat: "Bagaimana cara reset password?",
+    gambar: null,
     tanggal: "2025-10-12",
   },
 ];
 
-export default function FaqTable() {
+export default function DaftarAlatTable() {
   return (
     <div className="overflow-hidden mt-4 rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
@@ -32,7 +32,7 @@ export default function FaqTable() {
           {/* Table Header */}
           <TableHeader>
             <TableRow>
-              {["No", "Pertanyaan", "Jawaban", "Tanggal Unggah", "Action"].map(
+              {["No", "Nama Alat", "Gambar", "Tanggal Unggah", "Action"].map(
                 (header) => (
                   <TableCell
                     key={header}
@@ -59,11 +59,13 @@ export default function FaqTable() {
                     </TableCell>
 
                     <TableCell>
-                        {item.pertanyaan}
+                        {item.nama_alat}
                     </TableCell>
 
                     <TableCell>
-                        {item.jawaban}
+                        <span className="italic text-gray-400">
+                            {item.gambar ? item.gambar : "Belum ada"}
+                        </span>
                     </TableCell>
 
                     <TableCell className='text-center'>

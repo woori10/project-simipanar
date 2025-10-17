@@ -4,9 +4,10 @@ import {
     TableCell,
     TableHeader,
     TableRow,
-} from "../../Components/UI/Table/table";
+} from '@/Components/Layout/TableAdminLayout';
 
-import Badge from "../../Components/Badge/badge";
+
+import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 // Data tabel (tanpa interface)
 const tableData = [
@@ -64,14 +65,14 @@ export default function ReqUserTable() {
       <div className="max-w-full overflow-x-auto">
         <Table>
           {/* Table Header */}
-          <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+          <TableHeader>
             <TableRow>
-              {["No", "User", "Email",  "Status", "Action"].map(
+              {["No", "Nama", "NIP", "Satuan Kerja", "Email", "Action"].map(
                 (header) => (
                   <TableCell
                     key={header}
                     isHeader
-                    className={`px-5 py-3 font-medium text-theme-xs dark:text-gray-400
+                    className={`
                     ${
                         header === "No"
                         ? "text-center text-gray-500"
@@ -89,31 +90,20 @@ export default function ReqUserTable() {
           <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
             {tableData.map((order) => (
               <TableRow key={order.id}>
-                <TableCell className="px-4 py-3 text-gray-500 text-center text-theme-sm dark:text-gray-400">
+
+                <TableCell>
                   {order.id}
                 </TableCell>
-                <TableCell className="px-5 py-4 sm:px-6 text-start">
-                  <div className="flex items-center gap-3">
-                    {/* <div className="w-10 h-10 overflow-hidden rounded-full">
-                      <img
-                        width={40}
-                        height={40}
-                        src={order.user.image}
-                        alt={order.user.name}
-                      />
-                    </div> */}
-                    <div>
-                      <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                        {order.user.name}
-                      </span>
-                      <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                        {order.user.role}
-                      </span>
-                    </div>
-                  </div>
+
+                <TableCell>
+                    {order.user.name}
                 </TableCell>
 
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                <TableCell>
+                  {order.projectName}
+                </TableCell>
+
+                <TableCell>
                   {order.projectName}
                 </TableCell>
 
@@ -136,31 +126,15 @@ export default function ReqUserTable() {
                   </div>
                 </TableCell> */}
 
-                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  <Badge
-                    size="sm"
-                    color={
-                      order.status === "Active"
-                        ? "success"
-                        : order.status === "Pending"
-                        ? "warning"
-                        : "error"
-                    }
-                  >
+                <TableCell>
                     {order.status}
-                  </Badge>
                 </TableCell>
 
-                <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    <div className="flex flex-row gap-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                        </svg>
+                <TableCell>
+                    <div className="flex flex-row text-center gap-4">
+                            <CheckIcon className="w-6 h-6 text-green-600 hover:text-green-700 transition" />
+                            <XMarkIcon className="w-6 h-6 text-red-500 hover:text-red-600 transition" />
                     </div>
-
                 </TableCell>
               </TableRow>
             ))}

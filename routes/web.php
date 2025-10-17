@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
 
 // Route::get('/', function () {
@@ -21,12 +22,10 @@ use App\Http\Middleware\AdminMiddleware;
 // });
 
 Route::get('/', function () {
-    // kalau sudah login, arahkan ke dashboard
     if (Auth::check()) {
-        return redirect()->route('user.dashboard'); // ganti 'dashboard' sesuai route setelah login
+        return redirect()->route('user.dashboard');
     }
 
-    // kalau belum login, arahkan ke halaman login
     return redirect()->route('login');
 });
 
@@ -69,10 +68,36 @@ Route::get('/user/video-tutorial', function () {
     return Inertia::render('User/ModulDiklat');
 })->middleware(['auth', 'verified'])->name('user.modulDiklat');
 
+// ADMIN
+
 Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function () {
+
     Route::get('/admin/dashboard', function () {
         return Inertia::render('Admin/Dashboard');
     })->name('admin.dashboard');
+
+    // Routing Admin User
+
+    Route::get('/admin/kelola-user', function () {
+        return Inertia::render('Admin/User/UserMain');
+    })->name('admin.user');
+
+    Route::get('/admin/kelola-user/tambah-data', function () {
+        return Inertia::render('Admin/User/UserForm', [
+            'title' => 'Tambah User',
+        ]);
+    })->name('admin.user.create');
+
+    Route::get('/admin/kelola-user/edit/{id}', function ($id) {
+        return Inertia::render('Admin/User/UserForm', [ 'id' => $id,]);
+    })->name('admin.user.edit');
+
+    Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('/admin/users/{id}', [UserController::class, 'show']);
+    Route::put('/admin/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
+    Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
 
 
     // Routing Admin Prosedur Kerja
@@ -86,6 +111,18 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
             'title' => 'Tambah Prosedur Kerja',
         ]);
     })->name('admin.prosedurKerja.create');
+
+    // Routing Admin Daftar Alat
+
+    Route::get('/admin/kelola-daftar-alat', function () {
+        return Inertia::render('Admin/DaftarAlat/DaftarAlatMain');
+    })->name('admin.daftarAlat');
+
+    Route::get('/admin/kelola-daftar-alat/tambah-data', function () {
+        return Inertia::render('Admin/DaftarAlat/DaftarAlatForm', [
+            'title' => 'Tambah Daftar Alat',
+        ]);
+    })->name('admin.daftarAlat.create');
 
 
     // Routing Admin Modul Diklat
@@ -127,17 +164,6 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
     })->name('admin.videoTutorial.create');
 
 
-    // Routing Admin User
-
-    Route::get('/admin/kelola-user', function () {
-        return Inertia::render('Admin/User/UserMain');
-    })->name('admin.user');
-
-    Route::get('/admin/kelola-user/tambah-data', function () {
-        return Inertia::render('Admin/User/UserForm', [
-            'title' => 'Tambah User',
-        ]);
-    })->name('admin.user.create');
 
 });
 

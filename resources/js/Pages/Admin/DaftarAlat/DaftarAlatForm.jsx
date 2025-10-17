@@ -2,8 +2,8 @@ import FormLayout from "@/Components/Layout/FormLayout";
 
 export default function FormFaq() {
   const fields = [
-    { label: "Judul", name: "judul", type: "text", placeholder: "Masukkan pertanyaan" },
-    { label: "Video", name: "jawaban", type: "file", placeholder: "Masukkan jawaban" },
+    { label: "Nama Alat", name: "pertanyaan", type: "text", placeholder: "Masukkan pertanyaan" },
+    { label: "Gambar", name: "gambarAlat",  type: "file", accept: "image/*" },
   ];
 
   return (

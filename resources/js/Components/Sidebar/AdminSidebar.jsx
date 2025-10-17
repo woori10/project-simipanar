@@ -1,4 +1,5 @@
 import { useSidebar } from '@/Components/Sidebar/SidebarContext';
+import { Squares2X2Icon } from "@heroicons/react/24/outline";
 import {
     BerandaIcon,
     ChevronDownIcon,
@@ -6,7 +7,7 @@ import {
     ModulDiklatIcon,
     ProsedurKerjaIcon,
     UserCircleIcon,
-    VideoTutorialIcon,
+    VideoTutorialIcon
 } from "@icons";
 import { Link, usePage } from '@inertiajs/react';
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -25,6 +26,11 @@ const navItems = [
     path: "/admin/kelola-prosedur-kerja",
   },
   {
+    icon: <Squares2X2Icon className="text-main-blue" />,
+    name: "Daftar Alat",
+    path: "/admin/kelola-daftar-alat",
+  },
+  {
     icon: <ModulDiklatIcon />,
     name: "Modul Diklat",
     path: "/admin/kelola-modul-diklat",
@@ -40,42 +46,12 @@ const navItems = [
     path: "/admin/kelola-video-tutorial",
   },
   {
-    icon: <UserCircleIcon />,
+    icon: <UserCircleIcon className="text-main-blue" />,
     name: "User",
     path: "/admin/kelola-user",
-  }
+  },
 ];
 
-const othersItems = [
-//   {
-//     icon: <PieChartIcon />,
-//     name: "Charts",
-//     subItems: [
-//       { name: "Line Chart", path: "/line-chart", pro: false },
-//       { name: "Bar Chart", path: "/bar-chart", pro: false },
-//     ],
-//   },
-//   {
-//     icon: <BoxCubeIcon />,
-//     name: "UI Elements",
-//     subItems: [
-//       { name: "Alerts", path: "/alerts", pro: false },
-//       { name: "Avatar", path: "/avatars", pro: false },
-//       { name: "Badge", path: "/badge", pro: false },
-//       { name: "Buttons", path: "/buttons", pro: false },
-//       { name: "Images", path: "/images", pro: false },
-//       { name: "Videos", path: "/videos", pro: false },
-//     ],
-//   },
-//   {
-//     icon: <PlugInIcon />,
-//     name: "Authentication",
-//     subItems: [
-//       { name: "Sign In", path: "/signin", pro: false },
-//       { name: "Sign Up", path: "/signup", pro: false },
-//     ],
-//   },
-];
 
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
@@ -96,27 +72,21 @@ const AppSidebar = () => {
 
   useEffect(() => {
     let submenuMatched = false;
-    ["main", "others"].forEach((menuType) => {
-      const items = menuType === "main" ? navItems : othersItems;
-      items.forEach((nav, index) => {
+    navItems.forEach((nav, index) => {
         if (nav.subItems) {
-          nav.subItems.forEach((subItem) => {
+        nav.subItems.forEach((subItem) => {
             if (isActive(subItem.path)) {
-              setOpenSubmenu({
-                type: menuType,
-                index,
-              });
-              submenuMatched = true;
+            setOpenSubmenu({ type: "main", index });
+            submenuMatched = true;
             }
-          });
+        });
         }
-      });
     });
 
     if (!submenuMatched) {
-      setOpenSubmenu(null);
+        setOpenSubmenu(null);
     }
-  }, [location, isActive]);
+    }, [location, isActive]);
 
   useEffect(() => {
     if (openSubmenu !== null) {
@@ -177,7 +147,7 @@ const AppSidebar = () => {
                   className={`ml-auto w-5 h-5 transition-transform duration-200 ${
                     openSubmenu?.type === menuType &&
                     openSubmenu?.index === index
-                      ? "rotate-180 text-brand-500"
+                      ? "rotate-180"
                       : ""
                   }`}
                 />
@@ -333,22 +303,6 @@ const AppSidebar = () => {
               </h2> */}
               {renderMenuItems(navItems, "main")}
             </div>
-            {/* <div className="">
-              <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
-                  !isExpanded && !isHovered
-                    ? "lg:justify-center"
-                    : "justify-start"
-                }`}
-              >
-                {isExpanded || isHovered || isMobileOpen ? (
-                  "Others"
-                ) : (
-                  <HorizontalIcon />
-                )}
-              </h2>
-              {renderMenuItems(othersItems, "others")}
-            </div> */}
           </div>
         </nav>
       </div>

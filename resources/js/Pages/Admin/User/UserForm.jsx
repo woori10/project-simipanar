@@ -1,84 +1,49 @@
-import AppLayout from "@/Components/Layout/AdminLayout";
-import { Inertia } from "@inertiajs/inertia";
-import { Head } from "@inertiajs/react";
-import { useState } from "react";
+import FormLayout from "@/Components/Layout/FormLayout";
+import { usePage } from '@inertiajs/react';
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-export default function FormUser({ title }) {
-  const [form, setForm] = useState({
-    judul: "",
-    gambarSampul: null,
-    pdfFile: null,
-  });
+export default function FormUser() {
+    const { props } = usePage();
+    const id = props.id;
 
-  const handleChange = (e) => {
-    const { name, files } = e.target;
-    setForm({ ...form, [name]: files[0] });
-  };
+    const [formData, setFormData] = useState({});
+    const [title, setTitle] = useState("Tambah User");
+    const [submitUrl, setSubmitUrl] = useState("/admin/users");
 
-  const handleInputChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+    const [fields, setFields] = useState([
+        { label: "Nama", name: "name", type: "text", placeholder: "Masukkan nama" },
+        { label: "NIP", name: "nip", type: "text", placeholder: "Masukkan NIP" },
+        { label: "Email", name: "email", type: "email", placeholder: "Masukkan email" },
+        { label: "Satuan Kerja", name: "satker", type: "text", placeholder: "Masukkan satuan kerja" },
+        { label: "No Telp", name: "no_telp", type: "text", placeholder: "Masukkan nomor telepon" },
+        { label: "Role", name: "role", type: "text", placeholder: "Masukkan role" },
+        { label: "Password", name: "password", type: "password", placeholder: "Masukkan password" },
+    ]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const data = new FormData();
-    data.append("judul", form.judul);
-    if (form.gambarSampul) data.append("gambarSampul", form.gambarSampul);
-    if (form.pdfFile) data.append("pdfFile", form.pdfFile);
+    useEffect(() => {
+        if (id) {
+            setTitle("Edit User");
+            setSubmitUrl(`/admin/users/${id}`);
 
-    Inertia.post("/admin/kelola-user", data);
-  };
+            axios.get(`/admin/users/${id}`)
+                .then((res) => {
+                    const user = res.data.user;
+                    setFormData(user);
+                    setFields(prev =>
+                        prev.map(f => ({ ...f, value: user[f.name] || "" }))
+                    );
+                })
+                .catch((err) => console.error("Error ambil data user:", err));
+        }
+    }, [id]);
 
-  return (
-    <AppLayout>
-      <Head title={title} />
-      <div className="max-w-3xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md space-y-6">
-        <h1 className="text-lg font-bold">{title}</h1>
-        <form onSubmit={handleSubmit} className="space-y-6">
-
-          {/* Pertanyaan */}
-          <div>
-            <label className="block mb-2 font-medium">Pertanyaan</label>
-            <input
-              type="text"
-              name="judul"
-              value={form.judul}
-              onChange={handleInputChange}
-              placeholder="Masukkan judul yang sesuai"
-              className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          {/* Jawaban */}
-          <div>
-            <label className="block mb-2 font-medium">Jawaban</label>
-            <input
-              type="text"
-              name="judul"
-              value={form.judul}
-              onChange={handleInputChange}
-              placeholder="Masukkan judul yang sesuai"
-              className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-
-
-          {/* Buttons */}
-          <div className="flex justify-end gap-4">
-            <button
-              type="button"
-              className="px-4 py-2 border rounded text-gray-700"
-              onClick={() => window.history.back()}
-            >
-              Cancel
-            </button>
-            <button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded">
-              Upload
-            </button>
-          </div>
-        </form>
-      </div>
-    </AppLayout>
-  );
+    return (
+        <FormLayout
+            title={title}
+            fields={fields}
+            submitUrl={submitUrl}
+            initialValues={formData}
+        />
+    );
 }

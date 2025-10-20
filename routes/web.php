@@ -5,8 +5,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\FaqController;
+use App\Http\Controllers\DaftarAlatController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -95,6 +97,7 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
     Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users.store');
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('/admin/users/{id}', [UserController::class, 'show']);
+
     Route::put('/admin/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
     Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 
@@ -122,7 +125,15 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
         return Inertia::render('Admin/DaftarAlat/DaftarAlatForm', [
             'title' => 'Tambah Daftar Alat',
         ]);
-    })->name('admin.daftarAlat.create');
+    })->name('admin.alat.create');
+
+    Route::get('/admin/kelola-daftar-alat/edit/{id}', function ($id) {
+        return Inertia::render('Admin/DaftarAlat/DaftarAlatForm', ['id' => $id,]);
+    })->name('admin.alat.edit');
+
+    Route::post('/admin/daftar_alat', [DaftarAlatController::class, 'store'])->name('admin.alats.store');
+    Route::get('/admin/daftar_alat', [DaftarAlatController::class, 'index'])->name('admin.alats.index');
+    Route::get('/admin/daftar_alat/{id}', [DaftarAlatController::class, 'show']);
 
 
     // Routing Admin Modul Diklat
@@ -150,6 +161,13 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
         ]);
     })->name('admin.faq.create');
 
+    Route::get('/admin/kelola-faq/edit/{id}', function ($id) {
+        return Inertia::render('Admin/Faq/FaqForm', ['id' => $id,]);
+    })->name('admin.faq.edit');
+
+    Route::post('/admin/faqs', [FaqController::class, 'store'])->name('admin.faqs.store');
+    Route::get('/admin/faqs', [FaqController::class, 'index'])->name('admin.faqs.index');
+    Route::get('/admin/faqs/{id}', [FaqController::class, 'show']);
 
     // Routing Admin Video Tutorial
 

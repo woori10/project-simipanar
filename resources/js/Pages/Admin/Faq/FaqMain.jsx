@@ -4,10 +4,23 @@ import FaqTable from '@/Components/Table/FaqTable';
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { Inertia } from "@inertiajs/inertia";
 import { Head } from '@inertiajs/react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 export default function Dashboard({ title }) {
+
+    const [faqs, setFaqs] = useState([]);
+
+      useEffect(() => {
+        axios.get('/admin/faqs')
+          .then((res) => {
+            setFaqs(res.data.faqs);
+          })
+          .catch((err) => console.error('Gagal ambil data user:', err));
+      }, []);
   return (
-    <AppLayout>
+
+   <AppLayout>
         <Head title={title} />
         <h1 className="text-lg text-main-blue font-extrabold">Kelola Data Faq</h1>
             <div className="rounded-2xl border border-gray-200 bg-white my-4 p-6 dark:border-gray-800 dark:bg-white/[0.03]">
@@ -19,7 +32,7 @@ export default function Dashboard({ title }) {
                         <PlusIcon className="w-4 h-4 text-gray-600" />
                         Tambah Data
                     </SecondaryButton>
-                    <FaqTable />
+                    <FaqTable faqs={faqs}/>
                 </div>
             </div>
     </AppLayout>

@@ -8,7 +8,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 export default function UserMain({ title }) {
-  const [users, setUsers] = useState([]);
+
+    const [users, setUsers] = useState([]);
 
   useEffect(() => {
     axios.get('/admin/users')

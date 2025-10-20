@@ -17,13 +17,13 @@ export default function UserTable() {
     useEffect(() => {
         axios.get('/admin/users').then((res) => {
         setUsers(res.data.users);
-        });
+        });}, []);
 
         // axios.get('/admin/users/{id}').then((res) => {
         // setUsers(res.data.users);
         // });
 
-    }, []);
+
     return (
         <div className="overflow-hidden mt-4 rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
         <div className="max-w-full overflow-x-auto">

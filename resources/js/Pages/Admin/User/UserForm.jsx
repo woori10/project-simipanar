@@ -4,9 +4,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function FormUser() {
+
     const { props } = usePage();
     const id = props.id;
-
     const [formData, setFormData] = useState({});
     const [title, setTitle] = useState("Tambah User");
     const [submitUrl, setSubmitUrl] = useState("/admin/users");

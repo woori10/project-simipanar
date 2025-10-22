@@ -9,6 +9,7 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\DaftarAlatController;
+use App\Http\Controllers\ProsedurKerjaController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -114,6 +115,15 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
             'title' => 'Tambah Prosedur Kerja',
         ]);
     })->name('admin.prosedurKerja.create');
+
+    Route::get('/admin/kelola-prosedur-kerja/edit/{id}', function ($id) {
+        return Inertia::render('Admin/ProsedurKerja/ProsedurKerjaForm', [ 'id' => $id,]);
+    })->name('admin.prosedurKerja.edit');
+
+    Route::post('/admin/prosedur-kerja', [ProsedurKerjaController::class, 'store'])->name('admin.prosedurKerja.store');
+    Route::get('/admin/prosedur-kerja', [ProsedurKerjaController::class, 'index'])->name('admin.prosedurKerja.index');
+    Route::get('/admin/prosedur-kerja/{id}', [ProsedurKerjaController::class, 'show']);
+
 
     // Routing Admin Daftar Alat
 

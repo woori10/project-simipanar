@@ -51,6 +51,7 @@ export default function FaqTable() {
             {faqs.length > 0 ? (
               faqs.map((faq, index) => (
                 <TableRow key={faq.id}>
+                    
                   <TableCell className="text-center">{index + 1}</TableCell>
 
                   <TableCell>{faq.pertanyaan}</TableCell>

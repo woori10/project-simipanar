@@ -17,7 +17,7 @@ export default function FormLayout({
   const { errors } = usePage().props;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 🔹 Handle perubahan input
+  // 🔹 Handle perubahan input umum
   const handleChange = (e) => {
     const { name, type, files, value } = e.target;
     setFormData((prev) => ({
@@ -78,43 +78,89 @@ export default function FormLayout({
                   rows={4}
                   className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-
-              /* === FILE INPUT === */
               ) : field.type === "file" ? (
+                /* === FILE INPUT === */
                 <div className="space-y-2">
                   {formData?.[field.name] instanceof File ||
                   typeof formData?.[field.name] === "string" ||
                   formData?.[`${field.name}_url`] ? (
-                    // === TAMPIL NAMA FILE ===
-                    <div className="flex items-center justify-between border rounded-md p-3 bg-gray-50">
-                      <span className="text-sm text-gray-700 truncate max-w-[80%]">
-                        {formData[field.name]?.name
-                          ? formData[field.name].name
-                          : formData[`${field.name}_url`]
-                          ? formData[`${field.name}_url`].split("/").pop()
-                          : typeof formData[field.name] === "string"
-                          ? formData[field.name].split("/").pop()
-                          : ""}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            [field.name]: null,
-                            [`${field.name}_url`]: null,
-                          }))
-                        }
-                        className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
-                      >
-                        Ganti File
-                      </button>
-                    </div>
+                    <>
+                      {/* === TAMPIL NAMA FILE === */}
+                      <div className="flex items-center justify-between border rounded-md p-3 bg-gray-50">
+                        <span className="text-sm text-gray-700 truncate max-w-[80%]">
+                          {formData[field.name]?.name
+                            ? formData[field.name].name
+                            : formData[`${field.name}_url`]
+                            ? formData[`${field.name}_url`].split("/").pop()
+                            : typeof formData[field.name] === "string"
+                            ? formData[field.name].split("/").pop()
+                            : ""}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              [field.name]: null,
+                              [`${field.name}_url`]: null,
+                            }))
+                          }
+                          className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+                        >
+                          Ganti File
+                        </button>
+                      </div>
+
+                      {/* === PREVIEW FILE === */}
+                        {(formData[field.name] || formData[`${field.name}_url`]) &&
+                        (field.accept?.includes("image") ||
+                            field.accept?.includes("pdf") ||
+                            field.accept?.includes("video")) && (
+                            <div className="mt-3 flex flex-col items-center">
+                            {field.accept?.includes("image") ? (
+                                <img
+                                src={
+                                    formData[field.name]
+                                    ? URL.createObjectURL(formData[field.name])
+                                    : formData[`${field.name}_url`]
+                                }
+                                alt="Preview"
+                                className="w-64 h-40 mt-8 mx-auto rounded-lg border"
+                                />
+                            ) : field.accept?.includes("pdf") ? (
+                                <iframe
+                                src={
+                                    formData[field.name]
+                                    ? URL.createObjectURL(formData[field.name])
+                                    : formData[`${field.name}_url`]
+                                }
+                                title="Preview PDF"
+                                className="w-full h-[500px] border rounded-md mt-4"
+                                />
+                            ) : (
+                                <video
+                                controls
+                                className="w-80 h-56 rounded-lg border shadow-md mt-4"
+                                src={
+                                    formData[field.name]
+                                    ? URL.createObjectURL(formData[field.name])
+                                    : formData[`${field.name}_url`]
+                                }
+                                >
+                                Browser kamu tidak mendukung video preview.
+                                </video>
+                            )}
+                            </div>
+                        )}
+
+                    </>
                   ) : (
                     // === INPUT UPLOAD ===
                     <label className="block w-full p-6 border border-dashed border-gray-300 rounded-lg text-center cursor-pointer hover:border-blue-500 transition">
                       <div className="space-y-2">
-                        <p className="text-gray-400">Drag and Drop Your File Here!</p>
+                        <p className="text-gray-400">
+                          Drag and Drop Your File Here!
+                        </p>
                         <p className="text-sm text-gray-400">
                           {field.accept?.includes("video")
                             ? "Upload MP4, AVI, MOV (max 50 MB)"
@@ -126,7 +172,7 @@ export default function FormLayout({
                           type="file"
                           name={field.name}
                           accept={field.accept}
-                          onChange={handleChange}
+                          onChange={field.onChange || handleChange} // 🧠 bisa pakai custom handler dari luar
                           className="hidden"
                         />
                         <PrimaryButton
@@ -144,9 +190,8 @@ export default function FormLayout({
                     </label>
                   )}
                 </div>
-
-              /* === SELECT INPUT === */
               ) : field.type === "select" ? (
+                /* === SELECT INPUT === */
                 <select
                   name={field.name}
                   value={formData?.[field.name] ?? ""}
@@ -160,9 +205,8 @@ export default function FormLayout({
                     </option>
                   ))}
                 </select>
-
-              /* === TEXT INPUT === */
               ) : (
+                /* === TEXT INPUT === */
                 <input
                   type={field.type}
                   name={field.name}

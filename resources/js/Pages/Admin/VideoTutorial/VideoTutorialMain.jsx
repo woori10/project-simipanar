@@ -32,7 +32,12 @@ export default function Dashboard({ title }) {
                         <PlusIcon className="w-4 h-4 text-gray-600" />
                         Tambah Data
                     </SecondaryButton>
-                    <VideoTutorialTable videos={videos} />
+                    <VideoTutorialTable
+                        videos={videos}
+                        onDeleteSuccess={(deletedId) => {
+                        setVideos((prev) => prev.filter((item) => item.id !== deletedId));
+                        }}
+                    />
                 </div>
             </div>
     </AppLayout>

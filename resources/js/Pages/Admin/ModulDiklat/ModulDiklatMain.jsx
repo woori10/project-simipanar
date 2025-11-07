@@ -32,7 +32,11 @@ export default function Dashboard({ title }) {
                     <PlusIcon className="w-4 h-4 text-gray-600" />
                     Tambah Data
                 </SecondaryButton>
-                <ModulDiklatTable moduls={moduls}/>
+                <ModulDiklatTable
+                    moduls={moduls}
+                    onDeleteSuccess={(deletedId) => {
+                        setModuls((prev) => prev.filter((item) => item.id !== deletedId));
+                    }}/>
             </div>
 
         </div>

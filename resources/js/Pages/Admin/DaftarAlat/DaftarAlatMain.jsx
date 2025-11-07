@@ -32,7 +32,12 @@ export default function Dashboard({ title }) {
                             <PlusIcon className="w-4 h-4 text-gray-600" />
                             Tambah Data
                         </SecondaryButton>
-                        <DaftarAlatTable alats={alats} />
+                        <DaftarAlatTable
+                            alats={alats}
+                            onDeleteSuccess={(deletedId) => {
+                            setAlats((prev) => prev.filter((item) => item.id !== deletedId));
+                        }}
+                        />
                     </div>
                 </div>
         </AppLayout>

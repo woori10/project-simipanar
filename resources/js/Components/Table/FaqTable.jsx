@@ -1,91 +1,114 @@
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { router } from '@inertiajs/react';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
 import {
     Table,
     TableBody,
     TableCell,
     TableHeader,
     TableRow,
-} from "../Layout/TableAdminLayout";
+} from '@/Components/Layout/TableAdminLayout';
+import DeleteModal from '@/Components/Modal/DeleteModal';
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { router } from '@inertiajs/react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+// import toast from "react-hot-toast";
+import Swal from 'sweetalert2';
+
 
 export default function FaqTable() {
-    
-  const [faqs, setFaqs] = useState([]);
 
-  useEffect(() => {
-    axios.get('/admin/faqs')
-      .then((res) => {
-        setFaqs(res.data.faqs || []); // biar aman kalau res.data.faqs undefined
-      })
-      .catch((err) => console.error("Gagal ambil data FAQ:", err));
-  }, []);
+    const [faqs, setFaqs] = useState([]);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
 
-  return (
-    <div className="overflow-hidden mt-4 rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-      <div className="max-w-full overflow-x-auto">
-        <Table>
-          {/* Table Header */}
-          <TableHeader>
-            <TableRow>
-              {["No", "Pertanyaan", "Jawaban", "Tanggal Unggah", "Action"].map(
-                (header) => (
-                  <TableCell
-                    key={header}
-                    isHeader
-                    className={`${
-                      header === "No" || header === "Tanggal Unggah" || header === "Action"
-                        ? "text-center"
-                        : "text-start"
-                    }`}
-                  >
-                    {header}
-                  </TableCell>
-                )
-              )}
-            </TableRow>
-          </TableHeader>
+    // ambil data faq dari backend
+    useEffect(() => {
+        axios.get('/admin/faqs')
+            .then((res) => {
+                setFaqs(res.data.faqs);
+            })
+            .catch((err) => console.error('Gagal ambil data FAQ:', err));
+    }, []);
 
-          {/* Table Body */}
-          <TableBody>
-            {faqs.length > 0 ? (
-              faqs.map((faq, index) => (
-                <TableRow key={faq.id}>
+    // fungsi hapus data
+    const handleDelete = async () => {
+        try {
+            await axios.delete(`/admin/faqs/${selectedId}`);
+            setFaqs((prev) => prev.filter(item => item.id !== selectedId));
+            setShowDeleteModal(false);
 
-                  <TableCell className="text-center">{index + 1}</TableCell>
+            Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Data berhasil dihapus!',
+            showConfirmButton: false,
+            timer: 2500,
+            });
+        } catch (error) {
+            console.error("Gagal hapus data FAQ:", error);
+            Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Gagal menghapus data!',
+            });
+        }
+    };
 
-                  <TableCell>{faq.pertanyaan}</TableCell>
+    return (
+        <div className="overflow-hidden mt-4 rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+            <div className="max-w-full overflow-x-auto">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            {["No", "Pertanyaan", "Jawaban", "Action"].map((header) => (
+                                <TableCell key={header} isHeader className="text-center">
+                                    {header}
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    </TableHeader>
 
-                  <TableCell>{faq.jawaban}</TableCell>
+                    <TableBody>
+                        {faqs.length > 0 ? (
+                            faqs.map((faq, index) => (
+                                <TableRow key={faq.id}>
+                                    <TableCell className="text-center">{index + 1}</TableCell>
+                                    <TableCell>{faq.pertanyaan}</TableCell>
+                                    <TableCell>{faq.jawaban}</TableCell>
 
-                  <TableCell className="text-center italic">
-                    {faq.created_at
-                      ? new Date(faq.created_at).toLocaleDateString("id-ID")
-                      : "-"}
-                  </TableCell>
+                                    <TableCell className="text-center">
+                                        <div className="flex flex-row justify-center gap-4">
+                                            <PencilSquareIcon
+                                                className="w-6 h-6 text-blue-500 hover:text-blue-500 transition"
+                                                onClick={() => router.visit(`/admin/kelola-faq/edit/${faq.id}`)}
+                                            />
+                                            <TrashIcon
+                                                className="w-6 h-6 text-red-500 hover:text-red-500 transition"
+                                                onClick={() => {
+                                                    setSelectedId(faq.id);
+                                                    setShowDeleteModal(true);
+                                                }}
+                                            />
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan="4" className="text-center py-4 text-gray-400">
+                                    Tidak ada data FAQ.
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
 
-                  <TableCell className="text-center">
-                    <div className="flex flex-row justify-center gap-4">
-                      <PencilSquareIcon
-                      onClick={() => router.visit(`/admin/kelola-faq/edit/${faq.id}`)}
-                      className="w-6 h-6 text-blue-500 hover:text-blue-600 transition"
-                      />
-                      <TrashIcon className="w-6 h-6 text-red-500 hover:text-red-600 transition" />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan="8" className="text-center py-4">
-                  {/* Tidak ada data FAQ. */}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-    </div>
-  );
+            <DeleteModal
+                show={showDeleteModal}
+                onClose={() => setShowDeleteModal(false)}
+                onConfirm={handleDelete}
+                message="Apakah kamu yakin ingin menghapus FAQ ini?"
+            />
+        </div>
+    );
 }

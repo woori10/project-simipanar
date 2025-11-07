@@ -22,7 +22,20 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+       root.render(
+      <>
+        <App {...props} />
+        {/* <Toaster
+          position="top-center"
+          toastOptions={{
+            style: {
+              background: '#fffff',
+              color: '#000000',
+            },
+          }}
+        /> */}
+      </>
+    );
     },
     // progress: {
     //     color: '#4B5563',

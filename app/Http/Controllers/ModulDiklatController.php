@@ -112,7 +112,7 @@ class ModulDiklatController extends Controller
         $modulDiklat = ModulDiklat::findOrFail($id);
 
         // hapus file PDF juga dari storage
-        Storage::disk('public')->delete($modulDiklat->file_pdf);
+        Storage::disk('public')->delete($modulDiklat->dokumen);
 
         $modulDiklat->delete();
 

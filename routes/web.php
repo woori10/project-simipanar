@@ -12,6 +12,7 @@ use App\Http\Controllers\DaftarAlatController;
 use App\Http\Controllers\ProsedurKerjaController;
 use App\Http\Controllers\ModulDiklatController;
 use App\Http\Controllers\VideoTutorialController;
+use App\Http\Controllers\DashboardController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -80,6 +81,9 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
     Route::get('/admin/dashboard', function () {
         return Inertia::render('Admin/Dashboard');
     })->name('admin.dashboard');
+
+    Route::get('/admin/dashboard/counts', [DashboardController::class, 'getCounts'])->name('admin.dashboard.counts');
+
 
     // Routing Admin User
 

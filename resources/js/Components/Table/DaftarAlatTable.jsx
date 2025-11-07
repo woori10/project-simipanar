@@ -1,5 +1,9 @@
+import DeleteModal from '@/Components/Modal/DeleteModal';
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { router } from '@inertiajs/react';
+import axios from 'axios';
+import { useState } from 'react';
+import Swal from 'sweetalert2';
 import {
     Table,
     TableBody,
@@ -8,94 +12,129 @@ import {
     TableRow,
 } from "../Layout/TableAdminLayout";
 
-export default function DaftarAlatTable({ alats }) {
+export default function DaftarAlatTable({ alats, onDeleteSuccess }) {
 
-  return (
-    <div className="overflow-hidden mt-4 rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-      <div className="max-w-full overflow-x-auto">
-        <Table>
-          {/* Table Header */}
-          <TableHeader>
-            <TableRow>
-              {["No", "Nama Alat", "Kategori", "Gambar", "Tanggal Unggah", "Action"].map(
-                (header) => (
-                  <TableCell
-                    key={header}
-                    isHeader
-                    className={`${
-                      header === "No" ||
-                      header === "Tanggal Unggah" ||
-                      header === "Action" ||
-                      header === "Gambar"
-                        ? "text-center"
-                        : "text-start"
-                    }`}
-                  >
-                    {header}
-                  </TableCell>
-                )
-              )}
-            </TableRow>
-          </TableHeader>
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
 
-          {/* Table Body */}
-            <TableBody>
-                    {alats.length > 0 ? (
-                        alats.map((alat, index) => (
-                        <TableRow key={alat.id}>
+    const handleDelete = async () => {
+            try {
+                await axios.delete(`/admin/daftar-alat/${selectedId}`);
+                setShowDeleteModal(false);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Data berhasil dihapus!',
+                    showConfirmButton: false,
+                    timer: 2500,
+                });
+                if (onDeleteSuccess) onDeleteSuccess(selectedId);
+            } catch (error) {
+                console.error("Gagal hapus Alat:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Gagal menghapus data!',
+                });
+            }
+        };
 
-                        <TableCell className='text-center'>{index + 1}</TableCell>
-
-                        <TableCell>
-                            {alat.nama_alat}
-                        </TableCell>
-
-                        <TableCell>
-                            {alat.kategori}
-                        </TableCell>
-
-                        <TableCell className="text-center">
-                            {alat.foto ? (
-                                <img
-                                src={alat.foto}
-                                alt={alat.nama_alat}
-                                className="w-16 h-16 object-cover rounded-md mx-auto"
-                                />
-                            ) : (
-                                <span className="italic text-gray-400">Belum ada</span>
-                            )}
-                        </TableCell>
-
-                        <TableCell className="text-center">
-                            {alat.created_at
-                                ? new Date(alat.created_at).toLocaleDateString("id-ID")
-                                : "-"}
-                        </TableCell>
-
-                        <TableCell  className="text-center">
-                            <div className="flex flex-row justify-center gap-4">
-                                <PencilSquareIcon
-                                className="w-6 h-6 text-blue-500 hover:text-blue-500 transition"
-                                onClick={() => router.visit(`/admin/kelola-daftar-alat/edit/${alat.id}`)}
-                                />
-                                <TrashIcon className="w-6 h-6 text-red-500 hover:text-red-500 transition" />
-                            </div>
-                        </TableCell>
-                    </TableRow>
-                    ))
-                ) : (
-                    <TableRow>
-                    <TableCell colSpan="8" className="text-center py-4">
-                        {/* Tidak ada data alat. */}
+    return (
+        <div className="overflow-hidden mt-4 rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+        <div className="max-w-full overflow-x-auto">
+            <Table>
+            {/* Table Header */}
+            <TableHeader>
+                <TableRow>
+                {["No", "Nama Alat", "Kategori", "Gambar", "Tanggal Unggah", "Action"].map(
+                    (header) => (
+                    <TableCell
+                        key={header}
+                        isHeader
+                        className={`${
+                        header === "No" ||
+                        header === "Tanggal Unggah" ||
+                        header === "Action" ||
+                        header === "Gambar"
+                            ? "text-center"
+                            : "text-start"
+                        }`}
+                    >
+                        {header}
                     </TableCell>
-                    </TableRow>
+                    )
                 )}
+                </TableRow>
+            </TableHeader>
 
+            {/* Table Body */}
+                <TableBody>
+                        {alats.length > 0 ? (
+                            alats.map((alat, index) => (
+                            <TableRow key={alat.id}>
 
+                            <TableCell className='text-center'>{index + 1}</TableCell>
 
-            </TableBody>
-        </Table>
-      </div>
-    </div>
-  );
+                            <TableCell>
+                                {alat.nama_alat}
+                            </TableCell>
+
+                            <TableCell>
+                                {alat.kategori}
+                            </TableCell>
+
+                            <TableCell className="text-center">
+                                {alat.foto ? (
+                                    <img
+                                    src={alat.foto}
+                                    alt={alat.nama_alat}
+                                    className="w-16 h-16 object-cover rounded-md mx-auto"
+                                    />
+                                ) : (
+                                    <span className="italic text-gray-400">Belum ada</span>
+                                )}
+                            </TableCell>
+
+                            <TableCell className="text-center">
+                                {alat.created_at
+                                    ? new Date(alat.created_at).toLocaleDateString("id-ID")
+                                    : "-"}
+                            </TableCell>
+
+                            <TableCell  className="text-center">
+                                <div className="flex flex-row justify-center gap-4">
+                                    <PencilSquareIcon
+                                        className="w-6 h-6 text-blue-500 hover:text-blue-500 transition"
+                                        onClick={() => router.visit(`/admin/kelola-daftar-alat/edit/${alat.id}`)}
+                                    />
+                                    <TrashIcon
+                                        className="w-6 h-6 text-red-500 hover:text-red-500 transition"
+                                        onClick={() => {
+                                            setSelectedId(alat.id);
+                                            setShowDeleteModal(true);
+                                            }}
+                                    />
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                        ))
+                    ) : (
+                        <TableRow>
+                        <TableCell colSpan="8" className="text-center py-4">
+                            {/* Tidak ada data alat. */}
+                        </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
+        </div>
+
+        <DeleteModal
+                    show={showDeleteModal}
+                    onClose={() => setShowDeleteModal(false)}
+                    onConfirm={handleDelete}
+                    message="Apakah kamu yakin ingin menghapus alat  ini?"
+                />
+        </div>
+    );
 }

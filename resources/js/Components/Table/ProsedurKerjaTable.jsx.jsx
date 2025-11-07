@@ -5,15 +5,42 @@ import {
     TableHeader,
     TableRow,
 } from '@/Components/Layout/TableAdminLayout';
+import DeleteModal from '@/Components/Modal/DeleteModal';
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { router } from '@inertiajs/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 
 
 export default function ProsedurKerjaTable() {
 
     const [prosedurKerjas, setProsedurKerjas] = useState([]);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
+
+    const handleDelete = async () => {
+        try {
+            await axios.delete(`/admin/prosedur-kerja/${selectedId}`);
+            setProsedurKerjas((prev) => prev.filter(item => item.id !== selectedId));
+            setShowDeleteModal(false);
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Data berhasil dihapus!',
+                showConfirmButton: false,
+                timer: 2500,
+            });
+        } catch (error) {
+            console.error("Gagal hapus data Prosedur:", error);
+                Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Gagal menghapus data!',
+            });
+        }
+    };
 
         useEffect(() => {
         axios.get('/admin/prosedur-kerja')
@@ -89,8 +116,15 @@ export default function ProsedurKerjaTable() {
                             <div className="flex flex-row justify-center gap-4">
                                 <PencilSquareIcon
                                     className="w-6 h-6 text-blue-500 hover:text-blue-500 transition"
-                                    onClick={() => router.visit(`/admin/kelola-prosedur-kerja/edit/${prosedurKerja.id}`)}/>
-                                <TrashIcon className="w-6 h-6 text-red-500 hover:text-red-500 transition" />
+                                    onClick={() => router.visit(`/admin/kelola-prosedur-kerja/edit/${prosedurKerja.id}`)}
+                                />
+                                <TrashIcon
+                                    className="w-6 h-6 text-red-500 hover:text-red-500 transition"
+                                    onClick={() => {
+                                        setSelectedId(prosedurKerja.id);
+                                        setShowDeleteModal(true);
+                                        }}
+                                />
                             </div>
                             </TableCell>
                         </TableRow>
@@ -105,6 +139,13 @@ export default function ProsedurKerjaTable() {
             </TableBody>
             </Table>
         </div>
-        </div>
+
+        <DeleteModal
+            show={showDeleteModal}
+            onClose={() => setShowDeleteModal(false)}
+            onConfirm={handleDelete}
+            message="Apakah kamu yakin ingin menghapus prosedur kerja ini?"
+        />
+    </div>
   );
 }

@@ -1,4 +1,5 @@
 import FormLayout from "@/Components/Layout/FormLayout";
+import { Inertia } from "@inertiajs/inertia";
 import { usePage } from '@inertiajs/react';
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -7,11 +8,19 @@ export default function FormUser() {
 
     const { props } = usePage();
     const id = props.id;
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState({
+        name:"",
+        nip:"",
+        email:"",
+        satker:"",
+        no_telp:"",
+        role:"",
+        password:"",
+    });
     const [title, setTitle] = useState("Tambah User");
     const [submitUrl, setSubmitUrl] = useState("/admin/users");
 
-    const [fields, setFields] = useState([
+    const fields = ([
         { label: "Nama", name: "name", type: "text", placeholder: "Masukkan nama" },
         { label: "NIP", name: "nip", type: "text", placeholder: "Masukkan NIP" },
         { label: "Email", name: "email", type: "email", placeholder: "Masukkan email" },
@@ -21,20 +30,57 @@ export default function FormUser() {
         { label: "Password", name: "password", type: "password", placeholder: "Masukkan password" },
     ]);
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            if (id) {
+                // edit data
+                await axios.put(`/admin/users/${id}`, formData);
+                alert("User berhasil diperbarui!");
+            } else {
+                // tambah data
+                await axios.post("/admin/users", formData);
+                alert("User berhasil ditambahkan!");
+            }
+
+            Inertia.visit("/admin/kelola-user"); // redirect balik ke halaman list user
+            } catch (error) {
+            console.error("Gagal menyimpan data:", error);
+            }
+        };
+
     useEffect(() => {
         if (id) {
             setTitle("Edit User");
             setSubmitUrl(`/admin/users/${id}`);
 
             axios.get(`/admin/users/${id}`)
-                .then((res) => {
-                    const user = res.data.user;
-                    setFormData(user);
-                    setFields(prev =>
-                        prev.map(f => ({ ...f, value: user[f.name] || "" }))
-                    );
-                })
-                .catch((err) => console.error("Error ambil data user:", err));
+            .then((res) => {
+                const user = res.data.user;
+                if (user) {
+                    setFormData({
+                    name: user.name,
+                    nip: user.nip,
+                    email: user.email,
+                    satker: user.satker,
+                    no_telp: user.no_telp,
+                    role: user.role,
+                    password: user.password,
+                    });
+                }
+            })
+        } else {
+            // Tambah mode
+            setFormData({
+            name: "",
+            nip: "",
+            email: "",
+            satker: "",
+            no_telp: "",
+            role: "",
+            password: "",
+            });
         }
     }, [id]);
 
@@ -42,8 +88,10 @@ export default function FormUser() {
         <FormLayout
             title={title}
             fields={fields}
+            formData={formData}
             submitUrl={submitUrl}
-            initialValues={formData}
+            setFormData={setFormData}
+            onSubmit={handleSubmit}
         />
     );
 }

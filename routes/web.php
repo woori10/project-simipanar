@@ -10,6 +10,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\DaftarAlatController;
 use App\Http\Controllers\ProsedurKerjaController;
+use App\Http\Controllers\ModulDiklatController;
+use App\Http\Controllers\VideoTutorialController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -98,7 +100,6 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
     Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users.store');
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('/admin/users/{id}', [UserController::class, 'show']);
-
     Route::put('/admin/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
     Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 
@@ -123,6 +124,8 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
     Route::post('/admin/prosedur-kerja', [ProsedurKerjaController::class, 'store'])->name('admin.prosedurKerja.store');
     Route::get('/admin/prosedur-kerja', [ProsedurKerjaController::class, 'index'])->name('admin.prosedurKerja.index');
     Route::get('/admin/prosedur-kerja/{id}', [ProsedurKerjaController::class, 'show']);
+    Route::put('/admin/prosedur-kerja/{id}', [ProsedurKerjaController::class, 'update'])->name('admin.prosedurKerja.update');
+    Route::delete('/admin/prosedur-kerja/{id}', [ProsedurKerjaController::class, 'destroy'])->name('admin.prosedurKerja.destroy');
 
 
     // Routing Admin Daftar Alat
@@ -141,15 +144,20 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
         return Inertia::render('Admin/DaftarAlat/DaftarAlatForm', ['id' => $id,]);
     })->name('admin.alat.edit');
 
-    Route::post('/admin/daftar_alat', [DaftarAlatController::class, 'store'])->name('admin.alats.store');
-    Route::get('/admin/daftar_alat', [DaftarAlatController::class, 'index'])->name('admin.alats.index');
-    Route::get('/admin/daftar_alat/{id}', [DaftarAlatController::class, 'show']);
+    Route::post('/admin/daftar-alat', [DaftarAlatController::class, 'store'])->name('admin.alats.store');
+    Route::get('/admin/daftar-alat', [DaftarAlatController::class, 'index'])->name('admin.alats.index');
+    Route::get('/admin/daftar-alat/{id}', [DaftarAlatController::class, 'show']);
+    Route::put('/admin/daftar-alat/{id}', [DaftarAlatController::class, 'update'])->name('admin.alats.update');
+    Route::delete('/admin/daftar-alat/{id}', [DaftarAlatController::class, 'destroy'])->name('admin.alats.destroy');
+
 
 
     // Routing Admin Modul Diklat
 
     Route::get('/admin/kelola-modul-diklat', function () {
-        return Inertia::render('Admin/ModulDiklat/ModulDiklatMain');
+        return Inertia::render('Admin/ModulDiklat/ModulDiklatMain' , [
+            'title' => 'Kelola Modul Diklat',
+        ]);
     })->name('admin.modulDiklat');
 
     Route::get('/admin/kelola-modul-diklat/tambah-data', function () {
@@ -157,6 +165,16 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
             'title' => 'Tambah Modul Diklat',
         ]);
     })->name('admin.modulDiklat.create');
+
+    Route::get('/admin/kelola-modul-diklat/edit/{id}', function ($id) {
+        return Inertia::render('Admin/ModulDiklat/ModulDiklatForm', [ 'id' => $id,]);
+    })->name('admin.modulDiklat.edit');
+
+    Route::post('/admin/modul-diklat', [ModulDiklatController::class, 'store'])->name('admin.modulDiklat.store');
+    Route::get('/admin/modul-diklat', [ModulDiklatController::class, 'index'])->name('admin.modulDiklat.index');
+    Route::get('/admin/modul-diklat/{id}', [ModulDiklatController::class, 'show']);
+    Route::put('admin/modul-diklat/{id}', [ModulDiklatController::class, 'update'])->name('admin.modulDiklat.update');
+    Route::delete('admin/modul-diklat/{id}', [ModulDiklatController::class, 'destroy'])->name('admin.modulDiklat.destroy');
 
 
     // Routing Admin FAQ
@@ -178,6 +196,8 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
     Route::post('/admin/faqs', [FaqController::class, 'store'])->name('admin.faqs.store');
     Route::get('/admin/faqs', [FaqController::class, 'index'])->name('admin.faqs.index');
     Route::get('/admin/faqs/{id}', [FaqController::class, 'show']);
+    Route::put('/admin/faqs/{id}', [FaqController::class, 'update'])->name('admin.faqs.update');
+    Route::delete('/admin/faqs/{id}', [FaqController::class, 'destroy'])->name('admin.faqs.destroy');
 
     // Routing Admin Video Tutorial
 
@@ -191,7 +211,15 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
         ]);
     })->name('admin.videoTutorial.create');
 
+    Route::get('/admin/kelola-video-tutorial/edit/{id}', function ($id) {
+        return Inertia::render('Admin/VideoTutorial/VideoTutorialForm', [ 'id' => $id,]);
+    })->name('admin.videoTutorial.edit');
 
+    Route::post('/admin/video-tutorial', [VideoTutorialController::class, 'store'])->name('admin.videoTutorial.store');
+    Route::get('/admin/video-tutorial', [VideoTutorialController::class, 'index'])->name('admin.videoTutorial.index');
+    Route::get('/admin/video-tutorial/{id}', [VideoTutorialController::class, 'show']);
+    Route::put('/admin/video-tutorial/{id}', [VideoTutorialController::class, 'update'])->name('admin.videoTutorial.update');
+    Route::delete('/admin/video-tutorial/{id}', [VideoTutorialController::class, 'destroy'])->name('admin.videoTutorial.destroy');
 
 });
 

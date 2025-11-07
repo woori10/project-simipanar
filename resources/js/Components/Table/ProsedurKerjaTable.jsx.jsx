@@ -6,6 +6,7 @@ import {
     TableRow,
 } from '@/Components/Layout/TableAdminLayout';
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { router } from '@inertiajs/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -86,7 +87,9 @@ export default function ProsedurKerjaTable() {
 
                             <TableCell  className="text-center">
                             <div className="flex flex-row justify-center gap-4">
-                                <PencilSquareIcon className="w-6 h-6 text-blue-500 hover:text-blue-500 transition" />
+                                <PencilSquareIcon
+                                    className="w-6 h-6 text-blue-500 hover:text-blue-500 transition"
+                                    onClick={() => router.visit(`/admin/kelola-prosedur-kerja/edit/${prosedurKerja.id}`)}/>
                                 <TrashIcon className="w-6 h-6 text-red-500 hover:text-red-500 transition" />
                             </div>
                             </TableCell>
@@ -95,7 +98,7 @@ export default function ProsedurKerjaTable() {
                 ) : (
                         <TableRow>
                             <TableCell colSpan="8" className="text-center py-4">
-                            Tidak ada data Prosedur Kerja.
+                            {/* Tidak ada data Prosedur Kerja. */}
                             </TableCell>
                         </TableRow>
                 )}

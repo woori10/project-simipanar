@@ -5,8 +5,27 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 
+
 class UserController extends Controller
 {
+    public function store(Request $request)
+    {
+         $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|lowercase|email|max:255|unique:users,email',
+            'satker' => 'required|string',
+            'nip' => 'required|string|max:18|unique:users,nip',
+            'no_telp' => 'required|string|max:20',
+            'role' => 'required|string',
+            'password' => 'required|string|min:6',
+        ]);
+
+        $users = User::create($data);
+
+        return redirect('/admin/kelola-user')
+                        ->with('success', 'User berhasil disimpan!');
+    }
+
     public function index()
     {
         $users = User::all();
@@ -39,6 +58,7 @@ class UserController extends Controller
             'satker' => 'string',
             'nip' => 'string|max:18|unique:users,nip,' . $id,
             'no_telp' => 'string|max:20',
+            'role' => 'string',
             'password' => 'nullable|string|min:6',
         ]);
 
@@ -48,6 +68,7 @@ class UserController extends Controller
             'satker' => $request->satker ?? $user->satker,
             'nip' => $request->nip ?? $user->nip,
             'no_telp' => $request->no_telp ?? $user->no_telp,
+            'role' => $request->role ?? $user->role,
             'password' => $request->password ? Hash::make($request->password) : $user->password,
         ]);
 

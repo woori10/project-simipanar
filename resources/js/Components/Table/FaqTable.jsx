@@ -11,6 +11,7 @@ import {
 } from "../Layout/TableAdminLayout";
 
 export default function FaqTable() {
+    
   const [faqs, setFaqs] = useState([]);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export default function FaqTable() {
             {faqs.length > 0 ? (
               faqs.map((faq, index) => (
                 <TableRow key={faq.id}>
-                    
+
                   <TableCell className="text-center">{index + 1}</TableCell>
 
                   <TableCell>{faq.pertanyaan}</TableCell>
@@ -78,7 +79,7 @@ export default function FaqTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan="8" className="text-center py-4">
-                  Tidak ada data FAQ.
+                  {/* Tidak ada data FAQ. */}
                 </TableCell>
               </TableRow>
             )}

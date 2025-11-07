@@ -28,11 +28,7 @@ const navItems = [
     name: "Modul Diklat",
     path: "/user/modul-diklat",
   },
-    {
-    icon: <FAQIcon />,
-    name: "FAQ",
-    path: "/user/faq",
-  },
+
 //     {
 //     icon: <PusatKeluhanIcon />,
 //     name: "Pusat Keluhan",
@@ -44,8 +40,13 @@ const navItems = [
     subItems: [
         {name: "IonScan", path: "/video-tutorial/ion-scan", pro: false},
         {name: "Hamzat", path: "/video-tutorial/hamzat", pro: false},
-        ],
-    },
+    ],
+  },
+  {
+    icon: <FAQIcon />,
+    name: "FAQ",
+    path: "/user/faq",
+  },
 ];
 
 const othersItems = [

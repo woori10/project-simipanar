@@ -12,7 +12,7 @@ export default function Dashboard({ title }) {
     const [alats, setAlats] = useState([]);
 
       useEffect(() => {
-        axios.get('/admin/daftar_alat')
+        axios.get('/admin/daftar-alat')
           .then((res) => {
             setAlats(res.data.alats);
           })

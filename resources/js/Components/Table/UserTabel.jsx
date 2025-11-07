@@ -92,7 +92,7 @@ export default function UserTable() {
                 ) : (
                     <TableRow>
                     <TableCell colSpan="8" className="text-center py-4">
-                        Tidak ada data user.
+                        {/* Tidak ada data user. */}
                     </TableCell>
                     </TableRow>
                 )}

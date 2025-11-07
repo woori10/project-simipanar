@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\ProsedurKerja;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProsedurKerjaController extends Controller
 {
@@ -22,18 +25,18 @@ class ProsedurKerjaController extends Controller
             'dokumen.max'      => 'Ukuran file maksimal 100 MB.',
         ]);
 
-        $dokumenPath = $request->file('dokumen')->store('dokumen', 'public');
+        $dokumen = $request->file('dokumen');
+        $dokumenPath = $dokumen->store('dokumen', 'public');
 
         $prosedur_kerja = ProsedurKerja::create([
             'judul' => $request->judul,
             'dokumen' => $dokumenPath,
         ]);
 
-        return response()->json([
-            'message' => 'Prosedur Kerja Berhasil Ditambahkan',
-            'data' => $prosedur_kerja
+        return redirect()
+            ->route('admin.prosedurKerja')
+            ->with('success', 'Prosedur Kerja berhasil ditambahkan.');
 
-        ]);
     }
 
     public function index()
@@ -65,8 +68,8 @@ class ProsedurKerjaController extends Controller
         $prosedur_kerja = ProsedurKerja::findOrFail($id);
 
         $request->validate([
-            'judul'=> 'string|max:255',
-            'dokumen'=> 'mimes:pdf|max:102400',
+            'judul'=> 'nullable|string|max:255',
+            'dokumen'=> 'nullable|mimes:pdf|max:102400',
         ]);
 
         if ($request->has('judul')){
@@ -80,10 +83,14 @@ class ProsedurKerjaController extends Controller
 
         $prosedur_kerja->save();
 
-        return response()->json([
-            'message'=>'Prosedur Kerja Berhasil Diperbarui',
-            'data'=>$prosedur_kerja
-        ]);
+        // return response()->json([
+        //     'message'=>'Prosedur Kerja Berhasil Diperbarui',
+        //     'data'=>$prosedur_kerja
+        // ]);
+        return redirect()
+            ->route('admin.prosedurKerja')
+            ->with('success', 'Prosedur Kerja berhasil ditambahkan.');
+
 
 
     }

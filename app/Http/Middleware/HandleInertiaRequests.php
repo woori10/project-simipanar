@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Inertia\Inertia;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -22,6 +23,13 @@ class HandleInertiaRequests extends Middleware
         return parent::version($request);
     }
 
+
+
+    // public function version(Request $request): ?string
+    // {
+    //     return Inertia::version($request);
+    // }
+
     /**
      * Define the props that are shared by default.
      *
@@ -36,4 +44,5 @@ class HandleInertiaRequests extends Middleware
             ],
         ];
     }
+
 }

@@ -35,15 +35,15 @@ const navItems = [
     name: "Modul Diklat",
     path: "/admin/kelola-modul-diklat",
   },
-    {
-    icon: <FAQIcon />,
-    name: "FAQ",
-    path: "/admin/kelola-faq",
-  },
   {
     icon: <VideoTutorialIcon />,
     name: "Video Tutorial",
     path: "/admin/kelola-video-tutorial",
+  },
+  {
+    icon: <FAQIcon />,
+    name: "FAQ",
+    path: "/admin/kelola-faq",
   },
   {
     icon: <UserCircleIcon className="text-main-blue" />,

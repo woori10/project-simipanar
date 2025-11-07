@@ -1,7 +1,9 @@
+import DashboardCard from '@/Components/Card/DashboardCard';
 import UserCard from '@/Components/Card/UserCard';
 import AppLayout from '@/Components/Layout/AdminLayout';
 import ReqUserTable from '@/Components/Table/ReqUserTable';
-import { ModulDiklatIcon, UserCircleIcon, VideoTutorialIcon } from "@icons";
+import { Squares2X2Icon, UserPlusIcon } from "@heroicons/react/24/outline";
+import { FAQIcon, ModulDiklatIcon, ProsedurKerjaIcon, UserCircleIcon, VideoTutorialIcon } from "@icons";
 import { Head } from '@inertiajs/react';
 import logo from '../../../images/bea-cukai.png';
 
@@ -35,82 +37,58 @@ export default function Dashboard({ title }) {
             </div>
 
             <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
-                {/* <!-- Metric Item Start --> */}
-                <div className="flex flex-row  gap-4 rounded-2xl w-full h-fit border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-                    <div className="flex items-center justify-center w-16 h-16 bg-main-yellow rounded-full dark:bg-gray-800">
-                        <ModulDiklatIcon className="text-gray-800 size-6 dark:text-white/90" />
-                    </div>
-                    <div className="flex justify-center items-center">
-                        <div>
-                            <h4 className="text-xl font-extrabold text-gray-800 dark:text-white/90">
-                            3,782
-                            </h4>
-                            <span className="text-xs text-gray-500 dark:text-gray-400">
-                            Total Modul Diklat
-                            </span>
 
-                        </div>
-                    </div>
-                </div>
-                {/* <!-- Metric Item End --> */}
+                <DashboardCard
+                    title="Total Prosedur Kerja"
+                    count={0}
+                    icon={ProsedurKerjaIcon}
+                    bgColor="bg-main-yellow"
+                />
 
-                 {/* <!-- Metric Item Start --> */}
-                <div className="flex flex-row gap-4 rounded-2xl w-full h-fit border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-                    <div className="flex items-center justify-center w-16 h-16 bg-main-yellow rounded-full dark:bg-gray-800">
-                        <VideoTutorialIcon className="text-gray-800 size-6 dark:text-white/90" />
-                    </div>
-                    <div className="flex justify-center items-center">
-                        <div>
-                            <h4 className="text-xl font-extrabold text-gray-800 dark:text-white/90">
-                            3,782
-                            </h4>
-                            <span className="text-xs text-gray-500 dark:text-gray-400">
-                            Total Video Tutorial
-                            </span>
+                <DashboardCard
+                    title="Total Alat"
+                    count={0}
+                    icon={Squares2X2Icon}
+                    bgColor="bg-main-yellow"
+                />
 
-                        </div>
-                    </div>
-                </div>
-                {/* <!-- Metric Item End --> */}
+                <DashboardCard
+                    title="Total Modul Diklat"
+                    count={0}
+                    icon={ModulDiklatIcon}
+                    bgColor="bg-main-yellow"
+                />
 
-                 {/* <!-- Metric Item Start --> */}
-                <div className="flex flex-row gap-4 rounded-2xl w-full h-fit border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-                    <div className="flex items-center justify-center w-16 h-16 bg-main-yellow rounded-full dark:bg-gray-800">
-                        <UserCircleIcon className="text-gray-800 size-6 dark:text-white/90" />
-                    </div>
-                    <div className="flex justify-center items-center">
-                        <div>
-                            <h4 className="text-xl font-extrabold text-gray-800 dark:text-white/90">
-                            3,782
-                            </h4>
-                            <span className="text-xs text-gray-500 dark:text-gray-400">
-                            Total Request User
-                            </span>
+                <DashboardCard
+                    title="Total FAQ"
+                    count={0}
+                    icon={FAQIcon}
+                    bgColor="bg-main-yellow"
+                />
 
-                        </div>
-                    </div>
-                </div>
-                {/* <!-- Metric Item End --> */}
+                <DashboardCard
+                    title="Total Video Tutorial"
+                    count={0}
+                    icon={VideoTutorialIcon}
+                    bgColor="bg-main-yellow"
+                />
 
-                 {/* <!-- Metric Item Start --> */}
-                <div className="flex flex-row gap-4 rounded-2xl w-full h-fit border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-                    <div className="flex items-center justify-center w-16 h-16 bg-main-yellow rounded-full dark:bg-gray-800">
-                        <UserCircleIcon className="text-gray-800 size-6 dark:text-white/90" />
-                    </div>
-                    <div className="flex justify-center items-center">
-                        <div>
-                            <h4 className="text-xl font-extrabold text-gray-800 dark:text-white/90">
-                            3,782
-                            </h4>
-                            <span className="text-xs text-gray-500 dark:text-gray-400">
-                            Total User
-                            </span>
+                <DashboardCard
+                    title="Total User"
+                    count={0}
+                    icon={UserCircleIcon}
+                    bgColor="bg-main-yellow"
+                />
 
-                        </div>
-                    </div>
-                </div>
-                {/* <!-- Metric Item End --> */}
+                <DashboardCard
+                    title="Total Requset User"
+                    count={0}
+                    icon={UserPlusIcon}
+                    bgColor="bg-main-yellow"
+                />
+
             </div>
+
         </div>
 
         <h1 className="text-lg text-main-blue font-extrabold">Baru saja Mengunjungi</h1>
@@ -124,12 +102,6 @@ export default function Dashboard({ title }) {
 
         <h1 className="text-lg text-main-blue font-extrabold">User Request</h1>
         <ReqUserTable />
-
-
-
-            <div>
-
-       </div>
 
     </AppLayout>
 

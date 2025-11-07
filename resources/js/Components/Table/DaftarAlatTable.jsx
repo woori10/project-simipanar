@@ -10,13 +10,6 @@ import {
 
 export default function DaftarAlatTable({ alats }) {
 
-    // const [alats, setAlats] = useState([]);
-
-        // useEffect(() => {
-        //     axios.get('/admin/daftar_alat').then((res) => {
-        //     setAlats(res.data.alats);
-        //     });}, []);
-
   return (
     <div className="overflow-hidden mt-4 rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
@@ -24,13 +17,16 @@ export default function DaftarAlatTable({ alats }) {
           {/* Table Header */}
           <TableHeader>
             <TableRow>
-              {["No", "Nama Alat", "Gambar", "Tanggal Unggah", "Action"].map(
+              {["No", "Nama Alat", "Kategori", "Gambar", "Tanggal Unggah", "Action"].map(
                 (header) => (
                   <TableCell
                     key={header}
                     isHeader
                     className={`${
-                      header === "No" || header === "Tanggal Unggah" || header === "Action"
+                      header === "No" ||
+                      header === "Tanggal Unggah" ||
+                      header === "Action" ||
+                      header === "Gambar"
                         ? "text-center"
                         : "text-start"
                     }`}
@@ -54,12 +50,16 @@ export default function DaftarAlatTable({ alats }) {
                             {alat.nama_alat}
                         </TableCell>
 
+                        <TableCell>
+                            {alat.kategori}
+                        </TableCell>
+
                         <TableCell className="text-center">
                             {alat.foto ? (
                                 <img
                                 src={alat.foto}
                                 alt={alat.nama_alat}
-                                className="w-24 h-24 object-cover rounded-md mx-auto"
+                                className="w-16 h-16 object-cover rounded-md mx-auto"
                                 />
                             ) : (
                                 <span className="italic text-gray-400">Belum ada</span>
@@ -86,7 +86,7 @@ export default function DaftarAlatTable({ alats }) {
                 ) : (
                     <TableRow>
                     <TableCell colSpan="8" className="text-center py-4">
-                        Tidak ada data alat.
+                        {/* Tidak ada data alat. */}
                     </TableCell>
                     </TableRow>
                 )}

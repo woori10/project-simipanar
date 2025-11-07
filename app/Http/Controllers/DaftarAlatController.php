@@ -12,11 +12,16 @@ class DaftarAlatController extends Controller
     {
         $request->validate([
             'nama_alat'=> 'required|string|max:255',
+            'kategori'=> 'required|string|max:255',
             'foto'=> 'required|image|mimes:jpg,jpeg,png|max:2048',
         ], [
             'nama_alat.required' => 'Nama harus diisi.',
             'nama_alat.string'   => 'Nama harus berupa teks.',
             'nama_alat.max'      => 'Nama maksimal 255 karakter.',
+
+            'kategori.required' => 'Kategori harus diisi.',
+            'kategori.string'   => 'Kategori harus berupa teks.',
+            'kategori.max'      => 'Kategori maksimal 255 karakter.',
 
             'foto.required' => 'Foto wajib diunggah.',
             'foto.image'    => 'File foto harus berupa gambar.',
@@ -28,14 +33,12 @@ class DaftarAlatController extends Controller
 
         $nama_alat = DaftarAlat::create([
             'nama_alat' => $request->nama_alat,
+            'kategori' => $request->kategori,
             'foto' => $fotoPath,
         ]);
 
-        return response()->json([
-            'message' => 'Alat Berhasil Ditambahkan',
-            'daftar_alat' => $nama_alat
-
-        ]);
+        return redirect('/admin/kelola-daftar-alat')
+                        ->with('success', 'Data berhasil disimpan!');
     }
 
     public function index()
@@ -44,6 +47,7 @@ class DaftarAlatController extends Controller
             return[
                 'id' => $item->id,
                 'nama_alat' => $item->nama_alat,
+                'kategori' => $item->kategori,
                 'foto' => asset('storage/'. $item->foto),
             ];
         });
@@ -59,7 +63,8 @@ class DaftarAlatController extends Controller
 
         return response()->json([
             'id' => $daftar_alat->id,
-            'namaAlat' => $daftar_alat->nama_alat,  
+            'nama_alat' => $daftar_alat->nama_alat,
+            'kategori' => $daftar_alat->kategori,
             'foto' => asset('storage/' . $daftar_alat->foto),
         ]);
     }
@@ -69,12 +74,14 @@ class DaftarAlatController extends Controller
         $daftar_alat = DaftarAlat::findOrFail($id);
 
         $request->validate([
-            'nama'=> 'string|max:255',
-            'foto'=> 'image|mimes:jpg,jpeg,png|max:2048',
+            'nama_alat'=> 'sometimes|string|max:255',
+            'kategori'=> 'sometimes|string|max:255',
+            'foto'=> 'sometimes|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         // update kolom teks
         $daftar_alat->nama_alat = $request->nama_alat ?? $daftar_alat->nama_alat;
+        $daftar_alat->kategori = $request->kategori ?? $daftar_alat->kategori;
 
         // update file foto bila ada
         if ($request->hasFile('foto')) {

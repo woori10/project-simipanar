@@ -4,8 +4,21 @@ import ModulDiklatTable from '@/Components/Table/ModulDiklatTable';
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { Inertia } from "@inertiajs/inertia";
 import { Head } from '@inertiajs/react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 export default function Dashboard({ title }) {
+
+    const [moduls, setModuls] = useState([]);
+
+    useEffect(() => {
+        axios.get('/admin/modul-diklat')
+        .then((res) => {
+            setModuls(res.data.modulDiklat);
+        })
+        .catch((err) => console.error('Gagal ambil data modul:', err));
+    }, []);
+
   return (
     <AppLayout>
         <Head title={title} />
@@ -19,7 +32,7 @@ export default function Dashboard({ title }) {
                     <PlusIcon className="w-4 h-4 text-gray-600" />
                     Tambah Data
                 </SecondaryButton>
-                <ModulDiklatTable />
+                <ModulDiklatTable moduls={moduls}/>
             </div>
 
         </div>

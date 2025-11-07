@@ -1,37 +1,18 @@
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { router } from '@inertiajs/react';
 import {
     Table,
     TableBody,
     TableCell,
     TableHeader,
     TableRow,
-} from '@/Components/Layout/TableAdminLayout';
+} from "../Layout/TableAdminLayout";
 
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
-
-// Data tabel
-const tableData = [
-  {
-    id: 1,
-    namaAlat: "Alat Pengukur Suhu",
-    gambar: null,
-    file: null,
-    tanggal: "2025-10-14",
-  },
-  {
-    id: 2,
-    namaAlat: "Alat Uji Tekanan",
-    gambar: null,
-    file: null,
-    tanggal: "2025-10-12",
-  },
-];
-
-export default function ModulDiklatTable() {
+export default function ModulDiklatTable({ moduls }) {
   return (
     <div className="overflow-hidden mt-4 rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
         <Table>
-          {/* Table Header */}
           <TableHeader>
             <TableRow>
               {["No", "Nama Alat", "Gambar", "File", "Tanggal Unggah", "Action"].map(
@@ -52,44 +33,65 @@ export default function ModulDiklatTable() {
             </TableRow>
           </TableHeader>
 
-          {/* Table Body */}
-          <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-            {tableData.map((item) => (
-              <TableRow key={item.id}>
+          <TableBody>
+            {moduls.length > 0 ? (
+              moduls.map((modul, index) => (
+                <TableRow key={modul.id}>
+                  <TableCell className="text-center">{index + 1}</TableCell>
 
-                <TableCell className="text-center">
-                  {item.id}
+                  <TableCell>{modul.nama_alat}</TableCell>
+
+                  <TableCell className="text-center">
+                    {modul.foto ? (
+                      <img
+                        src={modul.foto}
+                        alt={modul.nama_alat}
+                        className="w-24 h-24 object-cover rounded-md mx-auto"
+                      />
+                    ) : (
+                      <span className="italic text-gray-400">Belum ada</span>
+                    )}
+                  </TableCell>
+
+                  <TableCell className="text-center">
+                    {modul.dokumen ? (
+                      <a
+                        href={modul.dokumen}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 underline"
+                      >
+                        Lihat File
+                      </a>
+                    ) : (
+                      <span className="italic text-gray-400">Belum ada</span>
+                    )}
+                  </TableCell>
+
+                  <TableCell className="text-center">
+                    {modul.created_at
+                      ? new Date(modul.created_at).toLocaleDateString("id-ID")
+                      : "-"}
+                  </TableCell>
+
+                  <TableCell className="text-center">
+                    <div className="flex flex-row justify-center gap-4">
+                      <PencilSquareIcon
+                        className="w-6 h-6 text-blue-500 hover:text-blue-500 transition"
+                        onClick={() => router.visit(`/admin/kelola-modul-diklat/edit/${modul.id}`)}
+                        />
+                      <TrashIcon className="w-6 h-6 text-red-500 hover:text-red-700 transition" />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan="8" className="text-center py-4">
+                  {/* Tidak ada data modul. */}
                 </TableCell>
-
-                <TableCell>
-                  {item.namaAlat}
-                </TableCell>
-
-                <TableCell>
-                  <span className="italic text-gray-400">
-                    {item.gambar ? item.gambar : "Belum ada"}
-                  </span>
-                </TableCell>
-
-                <TableCell>
-                  <span className="italic text-gray-400">
-                    {item.file ? item.file : "Belum ada"}
-                  </span>
-                </TableCell>
-
-                <TableCell className='text-center'>
-                  {item.tanggal}
-                </TableCell>
-
-                <TableCell  className="text-center">
-                  <div className="flex flex-row justify-center gap-4">
-                    <PencilSquareIcon className="w-6 h-6 text-blue-500 hover:text-blue-500 transition" />
-                    <TrashIcon className="w-6 h-6 text-red-500 hover:text-red-500 transition" />
-                  </div>
-                </TableCell>
-
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>

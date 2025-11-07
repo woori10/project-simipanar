@@ -16,10 +16,8 @@ class FaqController extends Controller
 
         $faqs = Faq::create($data);
 
-        return response()->json([
-            'message' => 'FAQ berhasil dibuat',
-            'data'    => $faqs
-        ], 201);
+        return redirect('/admin/kelola-faq')
+                        ->with('success', 'Data berhasil disimpan!');
     }
 
     public function index()

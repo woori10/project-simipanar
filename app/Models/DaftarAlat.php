@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class DaftarAlat extends Model
 {
-    protected $table = 'daftar_alats';
-    protected $fillable = ['nama_alat','foto'];
+    use HasFactory;
 
-    public function materiDiklat()
+    protected $table = 'daftar_alats';
+    protected $fillable = ['nama_alat','kategori','foto'];
+
+    public function modulDiklats()
     {
-        return $this->hasMany(MateriDiklat::class);
+        return $this->hasMany(ModulDiklat::class);
     }
 
     public function videoTutorial()

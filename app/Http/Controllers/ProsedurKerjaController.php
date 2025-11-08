@@ -107,4 +107,20 @@ class ProsedurKerjaController extends Controller
             'message' => 'Prosedur Kerja Berhasil Dihapus'
         ]);
     }
+
+    public function indexUser()
+    {
+        $prosedurKerjas = \App\Models\ProsedurKerja::latest()->get()->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'judul' => $item->judul,
+                'dokumen_url' => asset('storage/' . $item->dokumen),
+            ];
+        });
+
+        return Inertia::render('User/ProsedurKerja', [
+            'prosedurKerjas' => $prosedurKerjas,
+        ]);
+    }
+
 }

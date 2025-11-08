@@ -1,33 +1,11 @@
 import AppLayout from '@/Components/Layout/UserLayout';
 import { ChevronDownIcon } from "@icons";
+import { usePage } from "@inertiajs/react";
 import { useState } from "react";
-
-
-const faqs = [
-  {
-    question: "Do I get free updates?",
-    answer:
-      "Yes, you will get free updates for all future improvements and bug fixes as long as the product is maintained.",
-  },
-  {
-    question: "Can I Customize TailAdmin to suit my needs?",
-    answer:
-      "Absolutely! TailAdmin is built with TailwindCSS and is highly customizable to match your project requirements.",
-  },
-  {
-    question: "What does Unlimited Projects mean?",
-    answer:
-      "It means you can use this template in as many projects as you want without any limitation.",
-  },
-  {
-    question: "Is TailAdmin suitable for production apps?",
-    answer:
-      "Yes, TailAdmin is fully production-ready and optimized for scalability and maintainability.",
-  },
-];
 
 export default function Faq() {
   const [openIndex, setOpenIndex] = useState(null);
+  const { faqs } = usePage().props; // Ambil data dari controller
 
   const toggleFaq = (index) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -35,38 +13,41 @@ export default function Faq() {
 
   return (
     <AppLayout>
-        <h1 className="text-xl font-bold">FAQ</h1>
-       <div className="bg-gray-50 min-h-screen">
-        <div className="py-6">
-            <div className="space-y-4">
-            {faqs.map((faq, index) => (
-                <div
-                key={index}
+      <h1 className="text-xl font-bold mb-4">FAQ</h1>
+      <div className="bg-gray-50 min-h-screen">
+        <div className="space-y-4">
+          {faqs.length === 0 ? (
+            <p className="text-gray-500">Belum ada FAQ yang tersedia.</p>
+          ) : (
+            faqs.map((faq, index) => (
+              <div
+                key={faq.id}
                 className="bg-white border border-gray-200 rounded-lg shadow-sm"
-                >
+              >
                 <button
-                    onClick={() => toggleFaq(index)}
-                    className="w-full flex items-center justify-between px-4 py-3 text-left"
+                  onClick={() => toggleFaq(index)}
+                  className="w-full flex items-center justify-between p-4 text-left"
                 >
-                    <span className="font-medium text-gray-800">
-                    {faq.question}
-                    </span>
-                    <ChevronDownIcon
+                  <span className="font-medium text-gray-800">
+                    {faq.pertanyaan}
+                  </span>
+                  <ChevronDownIcon
                     className={`h-5 w-5 text-gray-500 transform transition-transform ${
-                        openIndex === index ? "rotate-180" : ""
+                      openIndex === index ? "rotate-180" : ""
                     }`}
-                    />
+                  />
                 </button>
 
                 {openIndex === index && (
-                    <div className="px-4 pb-4 text-gray-600">{faq.answer}</div>
+                  <div className="px-4 pb-4 text-gray-600">
+                    {faq.jawaban}
+                  </div>
                 )}
-                </div>
-            ))}
-            </div>
+              </div>
+            ))
+          )}
         </div>
-        </div>
+      </div>
     </AppLayout>
   );
 }
-

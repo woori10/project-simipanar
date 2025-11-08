@@ -120,4 +120,21 @@ class ModulDiklatController extends Controller
             'message' => 'Materi Diklat Berhasil Dihapus'
         ]);
     }
+
+    public function indexUser()
+    {
+        $moduls = \App\Models\ModulDiklat::latest()->get()->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'nama_alat' => $item->nama_alat,
+                'foto' => $item->foto ? asset('storage/' . $item->foto) : null,
+                'dokumen' => $item->dokumen ? asset('storage/' . $item->dokumen) : null,
+                'tanggal' => $item->created_at->format('Y-m-d'),
+            ];
+        });
+
+        return inertia('User/ModulDiklat', [
+            'moduls' => $moduls,
+        ]);
+    }
 }

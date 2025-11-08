@@ -49,17 +49,19 @@ Route::get('/user/dashboard', function () {
     return Inertia::render('User/Dashboard');
 })->middleware(['auth', 'verified'])->name('user.dashboard');
 
-Route::get('/user/prosedur-kerja', function () {
-    return Inertia::render('User/ProsedurKerja');
-})->middleware(['auth', 'verified'])->name('user.prosedurKerja');
+Route::get('/user/prosedur-kerja', [ProsedurKerjaController::class, 'indexUser'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.prosedurKerja');
 
-Route::get('/user/modul-diklat', function () {
-    return Inertia::render('User/ModulDiklat');
-})->middleware(['auth', 'verified'])->name('user.modulDiklat');
+Route::get('/user/modul-diklat', [ModulDiklatController::class, 'indexUser'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.modulDiklat');
 
 Route::get('/user/faq', function () {
-    return Inertia::render('User/Faq');
-})->middleware(['auth', 'verified'])->name('user.FAQ');
+    return Inertia::render('User/Faq', [
+        'faqs' => \App\Models\Faq::all(),
+    ]);
+});
 
 Route::prefix('video-tutorial')->group(function () {
     Route::get('/ion-scan', function () {
@@ -71,8 +73,8 @@ Route::prefix('video-tutorial')->group(function () {
 })->middleware(['auth', 'verified'])->name('user.videoTutorial');
 
 Route::get('/user/video-tutorial', function () {
-    return Inertia::render('User/ModulDiklat');
-})->middleware(['auth', 'verified'])->name('user.modulDiklat');
+    return Inertia::render('User/VideoTutorial');
+})->middleware(['auth', 'verified'])->name('user.videoTutorial');
 
 // ADMIN
 

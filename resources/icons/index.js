@@ -1,3 +1,4 @@
+import ArrowLeftIcon from "./arrow-left.svg?react";
 import BerandaIcon from "./beranda.svg?react";
 import BoxCubeIcon from "./box-cube.svg?react";
 import BoxIconLine from "./box-line.svg?react";
@@ -20,7 +21,7 @@ import VideoTutorialIcon from "./video_tutorial.svg?react";
 
 
 export {
-    BerandaIcon, BoxCubeIcon, BoxIconLine, CalenderIcon,
+    ArrowLeftIcon, BerandaIcon, BoxCubeIcon, BoxIconLine, CalenderIcon,
     ChevronDownIcon, FAQIcon, GridIcon, GroupIcon, HorizontalIcon,
     ListIcon, ModulDiklatIcon, PageIcon, PieChartIcon, PlugInIcon, ProsedurKerjaIcon, PusatKeluhanIcon, TableIcon,
     UserCircleIcon,

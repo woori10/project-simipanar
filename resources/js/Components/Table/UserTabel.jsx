@@ -6,16 +6,17 @@ import {
     TableRow,
 } from '@/Components/Layout/TableAdminLayout';
 import DeleteModal from '@/Components/Modal/DeleteModal';
+import SuccessModal from '@/Components/Modal/SuccessModal';
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { router } from '@inertiajs/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import Swal from 'sweetalert2';
 
 export default function UserTable() {
 
     const [users, setUsers] = useState([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
 
     const handleDelete = async () => {
@@ -23,21 +24,10 @@ export default function UserTable() {
                 await axios.delete(`/admin/users/${selectedId}`);
                 setUsers((prev) => prev.filter(item => item.id !== selectedId));
                 setShowDeleteModal(false);
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: 'Data berhasil dihapus!',
-                    showConfirmButton: false,
-                    timer: 2500,
-                });
+                setShowSuccess(true);
+                setTimeout(() => setShowSuccess(false), 3000);
             } catch (error) {
                 console.error("Gagal hapus data User:", error);
-                    Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Gagal menghapus data!',
-                });
             }
         };
 
@@ -134,11 +124,16 @@ export default function UserTable() {
         </div>
 
         <DeleteModal
-                    show={showDeleteModal}
-                    onClose={() => setShowDeleteModal(false)}
-                    onConfirm={handleDelete}
-                    message="Apakah kamu yakin ingin menghapus user ini?"
-                />
+            show={showDeleteModal}
+            onClose={() => setShowDeleteModal(false)}
+            onConfirm={handleDelete}
+            message="Apakah kamu yakin ingin menghapus user ini?"
+        />
+
+        <SuccessModal
+            show={showSuccess}
+            message="User berhasil dihapus!"
+        />
 
         </div>
     );

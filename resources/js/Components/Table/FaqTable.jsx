@@ -6,18 +6,17 @@ import {
     TableRow,
 } from '@/Components/Layout/TableAdminLayout';
 import DeleteModal from '@/Components/Modal/DeleteModal';
+import SuccessModal from '@/Components/Modal/SuccessModal';
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { router } from '@inertiajs/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-// import toast from "react-hot-toast";
-import Swal from 'sweetalert2';
-
 
 export default function FaqTable() {
 
     const [faqs, setFaqs] = useState([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
 
     // ambil data faq dari backend
@@ -35,21 +34,10 @@ export default function FaqTable() {
             await axios.delete(`/admin/faqs/${selectedId}`);
             setFaqs((prev) => prev.filter(item => item.id !== selectedId));
             setShowDeleteModal(false);
-
-            Swal.fire({
-            icon: 'success',
-            title: 'Berhasil!',
-            text: 'Data berhasil dihapus!',
-            showConfirmButton: false,
-            timer: 2500,
-            });
+            setShowSuccess(true);
+            setTimeout(() => setShowSuccess(false), 3000);
         } catch (error) {
             console.error("Gagal hapus data FAQ:", error);
-            Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Gagal menghapus data!',
-            });
         }
     };
 
@@ -108,6 +96,11 @@ export default function FaqTable() {
                 onClose={() => setShowDeleteModal(false)}
                 onConfirm={handleDelete}
                 message="Apakah kamu yakin ingin menghapus FAQ ini?"
+            />
+
+            <SuccessModal
+                show={showSuccess}
+                message="FAQ berhasil dihapus!"
             />
         </div>
     );

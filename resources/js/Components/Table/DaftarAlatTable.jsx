@@ -1,9 +1,9 @@
 import DeleteModal from '@/Components/Modal/DeleteModal';
+import SuccessModal from '@/Components/Modal/SuccessModal';
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { router } from '@inertiajs/react';
 import axios from 'axios';
 import { useState } from 'react';
-import Swal from 'sweetalert2';
 import {
     Table,
     TableBody,
@@ -15,27 +15,18 @@ import {
 export default function DaftarAlatTable({ alats, onDeleteSuccess }) {
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
 
     const handleDelete = async () => {
             try {
                 await axios.delete(`/admin/daftar-alat/${selectedId}`);
                 setShowDeleteModal(false);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: 'Data berhasil dihapus!',
-                    showConfirmButton: false,
-                    timer: 2500,
-                });
+                setShowSuccess(true);
+                setTimeout(() => setShowSuccess(false), 3000);
                 if (onDeleteSuccess) onDeleteSuccess(selectedId);
             } catch (error) {
-                console.error("Gagal hapus Alat:", error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Gagal menghapus data!',
-                });
+                console.error("Gagal hapus data Modul Diklat:", error);
             }
         };
 
@@ -130,11 +121,17 @@ export default function DaftarAlatTable({ alats, onDeleteSuccess }) {
         </div>
 
         <DeleteModal
-                    show={showDeleteModal}
-                    onClose={() => setShowDeleteModal(false)}
-                    onConfirm={handleDelete}
-                    message="Apakah kamu yakin ingin menghapus alat  ini?"
-                />
+            show={showDeleteModal}
+            onClose={() => setShowDeleteModal(false)}
+            onConfirm={handleDelete}
+            message="Apakah kamu yakin ingin menghapus alat  ini?"
+        />
+
+        <SuccessModal
+            show={showSuccess}
+            message="Alat berhasil dihapus!"
+        />
+
         </div>
     );
 }

@@ -1,9 +1,9 @@
 import DeleteModal from '@/Components/Modal/DeleteModal';
+import SuccessModal from '@/Components/Modal/SuccessModal';
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { router } from '@inertiajs/react';
 import axios from 'axios';
 import { useState } from 'react';
-import Swal from 'sweetalert2';
 import {
     Table,
     TableBody,
@@ -15,30 +15,20 @@ import {
 export default function ModulDiklatTable({ moduls, onDeleteSuccess }) {
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
 
-        const handleDelete = async () => {
-                try {
-                    await axios.delete(`/admin/modul-diklat/${selectedId}`);
-                    // setDaftarAlat((prev) => prev.filter(item => item.id !== selectedId));
-                    setShowDeleteModal(false);
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil!',
-                        text: 'Data berhasil dihapus!',
-                        showConfirmButton: false,
-                        timer: 2500,
-                    });
-                    if (onDeleteSuccess) onDeleteSuccess(selectedId);
-                } catch (error) {
-                            console.error("Gagal hapus data Modul Diklat:", error);
-                                Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Gagal menghapus data!',
-                            });
-                }
-            };
+    const handleDelete = async () => {
+        try {
+            await axios.delete(`/admin/modul-diklat/${selectedId}`);
+            setShowDeleteModal(false);
+            setShowSuccess(true);
+            setTimeout(() => setShowSuccess(false), 3000);
+            if (onDeleteSuccess) onDeleteSuccess(selectedId);
+        } catch (error) {
+            console.error("Gagal hapus data Modul Diklat:", error);
+        }
+    };
 
     return (
         <div className="overflow-hidden mt-4 rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
@@ -134,11 +124,17 @@ export default function ModulDiklatTable({ moduls, onDeleteSuccess }) {
         </div>
 
         <DeleteModal
-                            show={showDeleteModal}
-                            onClose={() => setShowDeleteModal(false)}
-                            onConfirm={handleDelete}
-                            message="Apakah kamu yakin ingin menghapus modul diklat  ini?"
-                        />
+            show={showDeleteModal}
+            onClose={() => setShowDeleteModal(false)}
+            onConfirm={handleDelete}
+            message="Apakah kamu yakin ingin menghapus modul diklat  ini?"
+        />
+
+        <SuccessModal
+            show={showSuccess}
+            message="Modul Diklat berhasil dihapus!"
+        />
+
 
         </div>
     );

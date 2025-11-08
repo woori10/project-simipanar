@@ -6,17 +6,19 @@ import {
     TableRow,
 } from '@/Components/Layout/TableAdminLayout';
 import DeleteModal from '@/Components/Modal/DeleteModal';
+import SuccessModal from '@/Components/Modal/SuccessModal';
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { router } from '@inertiajs/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import Swal from 'sweetalert2';
+
 
 
 export default function ProsedurKerjaTable() {
 
     const [prosedurKerjas, setProsedurKerjas] = useState([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
 
     const handleDelete = async () => {
@@ -24,21 +26,10 @@ export default function ProsedurKerjaTable() {
             await axios.delete(`/admin/prosedur-kerja/${selectedId}`);
             setProsedurKerjas((prev) => prev.filter(item => item.id !== selectedId));
             setShowDeleteModal(false);
-
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: 'Data berhasil dihapus!',
-                showConfirmButton: false,
-                timer: 2500,
-            });
+            setShowSuccess(true);
+            setTimeout(() => setShowSuccess(false), 3000);
         } catch (error) {
-            console.error("Gagal hapus data Prosedur:", error);
-                Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Gagal menghapus data!',
-            });
+            console.error("Gagal hapus data Prosedur Kerja:", error);
         }
     };
 
@@ -145,6 +136,11 @@ export default function ProsedurKerjaTable() {
             onClose={() => setShowDeleteModal(false)}
             onConfirm={handleDelete}
             message="Apakah kamu yakin ingin menghapus prosedur kerja ini?"
+        />
+
+        <SuccessModal
+            show={showSuccess}
+            message="Prosedur Kerja berhasil dihapus!"
         />
     </div>
   );

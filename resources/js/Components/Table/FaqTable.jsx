@@ -23,7 +23,7 @@ export default function FaqTable() {
     useEffect(() => {
         axios.get('/admin/faqs')
             .then((res) => {
-                setFaqs(res.data.faqs);
+                setFaqs(res.data);
             })
             .catch((err) => console.error('Gagal ambil data FAQ:', err));
     }, []);
@@ -47,7 +47,7 @@ export default function FaqTable() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            {["No", "Pertanyaan", "Jawaban", "Action"].map((header) => (
+                            {["No", "Pertanyaan", "Jawaban", "Tanggal Unggah", "Action"].map((header) => (
                                 <TableCell key={header} isHeader className="text-center">
                                     {header}
                                 </TableCell>
@@ -60,8 +60,12 @@ export default function FaqTable() {
                             faqs.map((faq, index) => (
                                 <TableRow key={faq.id}>
                                     <TableCell className="text-center">{index + 1}</TableCell>
+
                                     <TableCell>{faq.pertanyaan}</TableCell>
+
                                     <TableCell>{faq.jawaban}</TableCell>
+
+                                    <TableCell className="text-center">{faq.tanggal}</TableCell>
 
                                     <TableCell className="text-center">
                                         <div className="flex flex-row justify-center gap-4">

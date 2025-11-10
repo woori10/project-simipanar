@@ -49,6 +49,7 @@ class DaftarAlatController extends Controller
                 'nama_alat' => $item->nama_alat,
                 'kategori' => $item->kategori,
                 'foto' => asset('storage/'. $item->foto),
+                'tanggal' => $item->created_at->format('Y-m-d'),
             ];
         });
 

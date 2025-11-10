@@ -22,10 +22,16 @@ class FaqController extends Controller
 
     public function index()
     {
-        return response()->json([
-            'message' => 'Daftar semua FAQ',
-            'faqs'    => Faq::all()
-        ]);
+        $faqs = Faq::all()->map(function ($item) {
+            return[
+                'id' => $item->id,
+                'pertanyaan' => $item->pertanyaan,
+                'jawaban' => $item->jawaban,
+                'tanggal' => $item->created_at->format('Y-m-d'),
+            ];
+        });
+
+        return response()->json($faqs);
     }
 
     public function show($id)

@@ -87,9 +87,7 @@ export default function DaftarAlatTable({ alats, onDeleteSuccess }) {
                             </TableCell>
 
                             <TableCell className="text-center">
-                                {alat.created_at
-                                    ? new Date(alat.created_at).toLocaleDateString("id-ID")
-                                    : "-"}
+                                {alat.tanggal}
                             </TableCell>
 
                             <TableCell  className="text-center">

@@ -46,6 +46,7 @@ class ProsedurKerjaController extends Controller
                 'id' => $item->id,
                 'judul' => $item->judul,
                 'dokumen_url' => asset('storage/'. $item->dokumen),
+                'tanggal' => $item->created_at->format('Y-m-d'),
             ];
         });
 

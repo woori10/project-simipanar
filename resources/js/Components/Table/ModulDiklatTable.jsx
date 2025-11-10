@@ -90,9 +90,7 @@ export default function ModulDiklatTable({ moduls, onDeleteSuccess }) {
                     </TableCell>
 
                     <TableCell className="text-center">
-                        {modul.created_at
-                        ? new Date(modul.created_at).toLocaleDateString("id-ID")
-                        : "-"}
+                        {modul.tanggal}
                     </TableCell>
 
                     <TableCell className="text-center">

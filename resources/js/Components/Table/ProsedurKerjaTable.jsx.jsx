@@ -98,9 +98,7 @@ export default function ProsedurKerjaTable() {
                             </TableCell>
 
                             <TableCell className='text-center'>
-                                {prosedurKerja.created_at
-                                ? new Date(prosedurKerja.created_at).toLocaleDateString("id-ID")
-                                : "-"}
+                                {prosedurKerja.tanggal}
                             </TableCell>
 
                             <TableCell  className="text-center">

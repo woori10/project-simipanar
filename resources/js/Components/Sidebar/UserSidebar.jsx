@@ -12,42 +12,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import logo from '../../../images/bea-cukai.png';
 
 
-const navItems = [
-  {
-    icon: <BerandaIcon />,
-    name: "Beranda",
-    path: "/",
-  },
-  {
-    icon: <ProsedurKerjaIcon />,
-    name: "Prosedur Kerja",
-    path: "/user/prosedur-kerja",
-  },
-  {
-    icon: <ModulDiklatIcon />,
-    name: "Modul Diklat",
-    path: "/user/modul-diklat",
-  },
-
-//     {
-//     icon: <PusatKeluhanIcon />,
-//     name: "Pusat Keluhan",
-//     path: "/",
-//   },
-  {
-    name: "Video Tutorial",
-    icon: <VideoTutorialIcon />,
-    subItems: [
-        {name: "IonScan", path: "/video-tutorial/ion-scan", pro: false},
-        {name: "Hamzat", path: "/video-tutorial/hamzat", pro: false},
-    ],
-  },
-  {
-    icon: <FAQIcon />,
-    name: "FAQ",
-    path: "/user/faq",
-  },
-];
 
 const othersItems = [
 //   {
@@ -81,19 +45,64 @@ const othersItems = [
 ];
 
 const AppSidebar = () => {
-  const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
-  const { url } = usePage();
 
-  const [openSubmenu, setOpenSubmenu] = useState(null);
-  const [subMenuHeight, setSubMenuHeight] = useState({});
-//   const [subMenuRefs = subMenuRefs] = useState({});
-  const subMenuRefs = useRef({});
+    const [daftarAlat, setDaftarAlat] = useState([]);
+    const navItems = [
+    {
+        icon: <BerandaIcon />,
+        name: "Beranda",
+        path: "/",
+    },
+    {
+        icon: <ProsedurKerjaIcon />,
+        name: "Prosedur Kerja",
+        path: "/user/prosedur-kerja",
+    },
+    {
+        icon: <ModulDiklatIcon />,
+        name: "Modul Diklat",
+        path: "/user/modul-diklat",
+    },
+    {
+        name: "Video Tutorial",
+        icon: <VideoTutorialIcon />,
+        subItems: daftarAlat.map(alat => ({
+        name: alat.nama_alat,
+        path: `/user/video-tutorial/${alat.id}`, // pakai id
+        pro: false,
+        })),
+    },
+    {
+        icon: <FAQIcon />,
+        name: "FAQ",
+        path: "/user/faq",
+    },
+    ];
 
-  // const isActive = (path: string) => location.pathname === path;
-  const isActive = useCallback(
-    (path) => location.pathname === path,
-    [location.pathname]
-  );
+
+    const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+    const { url } = usePage();
+    const [openSubmenu, setOpenSubmenu] = useState(null);
+    const [subMenuHeight, setSubMenuHeight] = useState({});
+    //   const [subMenuRefs = subMenuRefs] = useState({});
+    const subMenuRefs = useRef({});
+
+    // const isActive = (path: string) => location.pathname === path;
+    const isActive = useCallback(
+        (path) => location.pathname === path,
+        [location.pathname]
+    );
+
+
+    useEffect(() => {
+    fetch('/admin/daftar-alat') // route web Laravel yang sudah ada
+            .then(res => {
+                if (!res.ok) throw new Error('Network response was not ok');
+                return res.json();
+            })
+            .then(data => setDaftarAlat(data.alats))
+            .catch(err => console.error('Fetch error:', err));
+    }, []);
 
 
 

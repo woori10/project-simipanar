@@ -16,7 +16,7 @@ export default function ProsedurKerjaCard({ judul, onClick }) {
         <h4 className="font-bold text-gray-800 text-title-sm">
           {judul}
         </h4>
-        <span className="text-sm text-gray-500">Klik untuk lihat</span>
+        <span className="text-sm text-gray-500">Klik untuk Lihat</span>
       </div>
     </div>
   );

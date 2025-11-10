@@ -63,14 +63,23 @@ Route::get('/user/faq', function () {
     ]);
 });
 
-Route::prefix('video-tutorial')->group(function () {
-    Route::get('/ion-scan', function () {
-        return Inertia::render('User/VideoTutorial/IonScan');
-    });
-    Route::get('/hamzat', function () {
-        return Inertia::render('User/VideoTutorial/Hamzat');
-    });
-})->middleware(['auth', 'verified'])->name('user.videoTutorial');
+// Semua video tutorial per user
+Route::get('/user/video-tutorial', [VideoTutorialController::class, 'indexUser'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.videoTutorial');
+
+// Dinamis per alat
+Route::get('/user/video-tutorial/{alat_id}', [VideoTutorialController::class, 'showByAlat'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.videoTutorial.show');
+// Route::prefix('video-tutorial')->group(function () {
+//     Route::get('/ion-scan', function () {
+//         return Inertia::render('User/VideoTutorial/IonScan');
+//     });
+//     Route::get('/hamzat', function () {
+//         return Inertia::render('User/VideoTutorial/Hamzat');
+//     });
+// })->middleware(['auth', 'verified'])->name('user.videoTutorial');
 
 Route::get('/user/video-tutorial', function () {
     return Inertia::render('User/VideoTutorial');

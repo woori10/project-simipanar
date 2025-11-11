@@ -1,4 +1,5 @@
 import FormLayout from "@/Components/Layout/FormLayout";
+import SuccessModal from "@/Components/Modal/SuccessModal";
 import { Inertia } from "@inertiajs/inertia";
 import { usePage } from "@inertiajs/react";
 import axios from "axios";
@@ -6,22 +7,24 @@ import { useEffect, useState } from "react";
 
 export default function FormModulDiklat() {
 
-  const { props } = usePage();
-  const id = props.id;
-  const [alatOptions, setAlatOptions] = useState([]);
-  const [formData, setFormData] = useState({
-    daftar_alat_id: "",
-    dokumen: null,
-  });
-  const [title, setTitle] = useState("Tambah Modul Diklat");
-  const [submitUrl, setSubmitUrl] = useState("/admin/modul-diklat");
+    const { props } = usePage();
+    const id = props.id;
+    const [alatOptions, setAlatOptions] = useState([]);
+    const [title, setTitle] = useState("Tambah Modul Diklat");
+    const [submitUrl, setSubmitUrl] = useState("/admin/modul-diklat");
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
+    const [formData, setFormData] = useState({
+        daftar_alat_id: "",
+        dokumen: null,
+    });
 
-  useEffect(() => {
-    axios
-      .get("/admin/daftar-alat")
-      .then((res) => setAlatOptions(res.data.alats || []))
-      .catch((err) => console.error("Gagal ambil data alat:", err));
-  }, []);
+    useEffect(() => {
+        axios
+        .get("/admin/daftar-alat")
+        .then((res) => setAlatOptions(res.data.alats || []))
+        .catch((err) => console.error("Gagal ambil data alat:", err));
+    }, []);
 
   useEffect(() => {
     if (id) {
@@ -51,7 +54,8 @@ export default function FormModulDiklat() {
   }, [id]);
 
 
-    const handleSubmit = async (e, formData) => {
+    const handleSubmit = async (e) => {
+
         e.preventDefault();
             const data = new FormData();
                 Object.entries(formData).forEach(([key, value]) => {
@@ -59,19 +63,26 @@ export default function FormModulDiklat() {
                 });
 
             try {
+                let res;
                 if (id) {
-                    await axios.post(`/admin/modul-diklat/${id}`, data, {
+                    res = await axios.post(`/admin/modul-diklat/${id}`, data, {
                         headers: { "X-HTTP-Method-Override": "PUT" },
                     });
-                    alert("Modul Diklat berhasil diperbarui!");
                 } else {
-                    await axios.post("/admin/modul-diklat", data);
-                    alert("Modul Diklat berhasil ditambahkan!");
+                    res = await axios.post("/admin/modul-diklat", data);
                 }
 
-                Inertia.visit("/admin/kelola-modul-diklat");
-                } catch (error) {
-                    console.error("Gagal kirim:", error);
+                 // tampilkan success modal
+                setSuccessMessage(res.data.message);
+                setShowSuccess(true);
+
+                // timer modal + callback untuk refresh table / close form
+                setTimeout(() => {
+                    setShowSuccess(false);
+                    Inertia.visit("/admin/kelola-modul-diklat"); // tetap redirect ke table setelah modal
+                }, 1500);
+            } catch (error) {
+                console.error("Gagal kirim:", error);
             }
         };
 
@@ -94,13 +105,18 @@ export default function FormModulDiklat() {
   ];
 
   return (
-    <FormLayout
-      title={title}
-      fields={fields}
-      formData={formData}
-      submitUrl={submitUrl}
-      setFormData={setFormData}
-      onSubmit={handleSubmit}
-    />
+    <>
+        <FormLayout
+        title={title}
+        fields={fields}
+        formData={formData}
+        submitUrl={submitUrl}
+        setFormData={setFormData}
+        onSubmit={handleSubmit}
+        />
+
+        <SuccessModal show={showSuccess} message={successMessage} />
+    </>
+
   );
 }

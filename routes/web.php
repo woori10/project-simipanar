@@ -13,6 +13,10 @@ use App\Http\Controllers\ProsedurKerjaController;
 use App\Http\Controllers\ModulDiklatController;
 use App\Http\Controllers\VideoTutorialController;
 use App\Http\Controllers\DashboardController;
+use \App\Http\Controllers\SatuanKerjaController;
+use App\Http\Controllers\RegisterRequestController;
+use App\Http\Controllers\AdminUserRequestController;
+
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -27,6 +31,8 @@ use App\Http\Controllers\DashboardController;
 //     ]);
 // });
 
+Route::post('/register-request', [RegisterRequestController::class, 'store']);
+
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('user.dashboard');
@@ -34,6 +40,9 @@ Route::get('/', function () {
 
     return redirect()->route('login');
 });
+
+Route::get('/admin/satuan-kerja/search', [SatuanKerjaController::class, 'search'])->name('satker.search');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -47,7 +56,7 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
 
 Route::get('/user/dashboard', function () {
     return Inertia::render('User/Dashboard');
-})->middleware(['auth', 'verified'])->name('user.dashboard');
+})->middleware(['auth'])->name('user.dashboard');
 
 Route::get('/user/prosedur-kerja', [ProsedurKerjaController::class, 'indexUser'])
     ->middleware(['auth', 'verified'])
@@ -95,6 +104,16 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
 
     Route::get('/admin/dashboard/counts', [DashboardController::class, 'getCounts'])->name('admin.dashboard.counts');
 
+    // Request User
+
+    // List semua request pending
+    Route::get('/admin/requests', [AdminUserRequestController::class, 'index']);
+
+    // Approve request
+    Route::post('/admin/requests/{id}/approve', [AdminUserRequestController::class, 'approve']);
+
+    // Reject request
+    Route::post('/admin/requests/{id}/reject', [AdminUserRequestController::class, 'reject']);
 
     // Routing Admin User
 

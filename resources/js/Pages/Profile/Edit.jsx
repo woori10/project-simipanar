@@ -63,7 +63,7 @@ export default function Edit({ mustVerifyEmail, status, user }) {
 
                                     <div>
                                         <p className="text-sm text-gray-500">Satuan Kerja</p>
-                                        <p className="text-lg font-medium text-gray-800">Bekasi</p>
+                                        <p className="text-lg font-medium text-gray-800">{user.satker}</p>
                                     </div>
                                 </div>
                             </div>

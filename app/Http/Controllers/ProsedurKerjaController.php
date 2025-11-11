@@ -33,9 +33,10 @@ class ProsedurKerjaController extends Controller
             'dokumen' => $dokumenPath,
         ]);
 
-        return redirect()
-            ->route('admin.prosedurKerja')
-            ->with('success', 'Prosedur Kerja berhasil ditambahkan.');
+        return response()->json([
+            'message' => 'Prosedur Kerja berhasil ditambahkan!',
+            'faq' => $prosedur_kerja
+        ]);
 
     }
 
@@ -84,15 +85,10 @@ class ProsedurKerjaController extends Controller
 
         $prosedur_kerja->save();
 
-        // return response()->json([
-        //     'message'=>'Prosedur Kerja Berhasil Diperbarui',
-        //     'data'=>$prosedur_kerja
-        // ]);
-        return redirect()
-            ->route('admin.prosedurKerja')
-            ->with('success', 'Prosedur Kerja berhasil ditambahkan.');
-
-
+        return response()->json([
+            'message'=>'Prosedur Kerja Berhasil Diperbarui',
+            'data'=>$prosedur_kerja
+        ]);
 
     }
 

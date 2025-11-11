@@ -5,142 +5,108 @@ import {
     TableHeader,
     TableRow,
 } from '@/Components/Layout/TableAdminLayout';
-
-
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
-
-// Data tabel (tanpa interface)
-const tableData = [
-  {
-    id: 1,
-    user: {
-      image: "/images/user/user-17.jpg",
-      name: "Lindsey Curtis",
-      role: "Web Designer",
-    },
-    projectName: "Agency Website",
-    team: {
-      images: [
-        "/images/user/user-22.jpg",
-        "/images/user/user-23.jpg",
-        "/images/user/user-24.jpg",
-      ],
-    },
-    budget: "3.9K",
-    status: "Active",
-  },
-  {
-    id: 2,
-    user: {
-      image: "/images/user/user-18.jpg",
-      name: "Kaiya George",
-      role: "Project Manager",
-    },
-    projectName: "Technology",
-    team: {
-      images: ["/images/user/user-25.jpg", "/images/user/user-26.jpg"],
-    },
-    budget: "24.9K",
-    status: "Pending",
-  },
-  {
-    id: 3,
-    user: {
-      image: "../../../images/kurpet.jpg",
-      name: "Zain Geidt",
-      role: "Content Writing",
-    },
-    projectName: "Blog Writing",
-    team: {
-      images: ["/images/user/user-27.jpg"],
-    },
-    budget: "12.7K",
-    status: "Active",
-  },
-];
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function ReqUserTable() {
-  return (
-    <div className="overflow-hidden mt-4 rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-      <div className="max-w-full overflow-x-auto">
-        <Table>
-          {/* Table Header */}
-          <TableHeader>
-            <TableRow>
-              {["No", "Nama", "NIP", "Satuan Kerja", "Email", "Action"].map(
-                (header) => (
-                  <TableCell
-                    key={header}
-                    isHeader
-                    className={`
-                    ${
-                        header === "No"
-                        ? "text-center text-gray-500"
-                        : "text-start text-gray-500"
-                    }`}
-                  >
-                    {header}
-                  </TableCell>
-                )
-              )}
-            </TableRow>
-          </TableHeader>
+    const [tableData, setTableData] = useState([]);
 
-          {/* Table Body */}
-          <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-            {tableData.map((order) => (
-              <TableRow key={order.id}>
+    // Fetch request pending
+    const fetchRequests = async () => {
+        try {
+            const res = await axios.get('/admin/requests');
+            setTableData(res.data); // asumsi backend kirim array user request
+        } catch (err) {
+            console.error(err);
+            alert('Gagal load data request');
+        }
+    };
 
-                <TableCell>
-                  {order.id}
-                </TableCell>
+    useEffect(() => {
+        fetchRequests();
+    }, []);
 
-                <TableCell>
-                    {order.user.name}
-                </TableCell>
+    // Approve user
+    const handleApprove = async (id) => {
+        try {
+            await axios.post(`/admin/requests/${id}/approve`);
+            setTableData(prev => prev.filter(r => r.id !== id)); // langsung remove row
+            alert('User disetujui!');
+        } catch (err) {
+            console.error(err);
+            alert('Gagal approve user');
+        }
+    };
 
-                <TableCell>
-                  {order.projectName}
-                </TableCell>
+    // Reject user
+    const handleReject = async (id) => {
+        try {
+            await axios.post(`/admin/requests/${id}/reject`);
+            setTableData(prev => prev.filter(r => r.id !== id)); // langsung remove row
+            alert('User ditolak!');
+        } catch (err) {
+            console.error(err);
+            alert('Gagal reject user');
+        }
+    };
 
-                <TableCell>
-                  {order.projectName}
-                </TableCell>
+    return (
+        <div className="overflow-hidden mt-4 rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+            <div className="max-w-full overflow-x-auto">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            {["No", "Nama", "NIP", "Satuan Kerja", "Email", "Action"].map(
+                                (header) => (
+                                    <TableCell
+                                        key={header}
+                                        isHeader
+                                        className={`${
+                                            header === "No"
+                                            ? "text-center text-gray-500"
+                                            : "text-start text-gray-500"
+                                        }`}
+                                    >
+                                        {header}
+                                    </TableCell>
+                                )
+                            )}
+                        </TableRow>
+                    </TableHeader>
 
-                {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                  <div className="flex -space-x-2">
-                    {order.team.images.map((teamImage, index) => (
-                      <div
-                        key={index}
-                        className="w-6 h-6 overflow-hidden border-2 border-white rounded-full dark:border-gray-900"
-                      >
-                        <img
-                          width={24}
-                          height={24}
-                          src={teamImage}
-                          alt={`Team member ${index + 1}`}
-                          className="w-full size-6"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </TableCell> */}
-
-                <TableCell>
-                    {order.status}
-                </TableCell>
-
-                <TableCell>
-                    <div className="flex flex-row text-center gap-4">
-                            <CheckIcon className="w-6 h-6 text-green-600 hover:text-green-700 transition" />
-                            <XMarkIcon className="w-6 h-6 text-red-500 hover:text-red-600 transition" />
-                    </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    </div>
-  );
+                    <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                        {tableData.length === 0 && (
+                            <TableRow>
+                                <TableCell colSpan={6} className="text-center py-4 text-gray-500">
+                                    Tidak ada request pending
+                                </TableCell>
+                            </TableRow>
+                        )}
+                        {tableData.map((order, index) => (
+                            <TableRow key={order.id}>
+                                <TableCell className="text-center">{index + 1}</TableCell>
+                                <TableCell>{order.name}</TableCell>
+                                <TableCell>{order.nip}</TableCell>
+                                <TableCell>{order.satker}</TableCell>
+                                <TableCell>{order.email}</TableCell>
+                                <TableCell>
+                                    <div className="flex flex-row text-center gap-4">
+                                        <CheckIcon
+                                            className="w-6 h-6 text-green-600 hover:text-green-700 transition cursor-pointer"
+                                            onClick={() => handleApprove(order.id)}
+                                        />
+                                        <XMarkIcon
+                                            className="w-6 h-6 text-red-500 hover:text-red-600 transition cursor-pointer"
+                                            onClick={() => handleReject(order.id)}
+                                        />
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
+        </div>
+    );
 }

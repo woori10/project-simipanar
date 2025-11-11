@@ -1,46 +1,59 @@
 import FormLayout from "@/Components/Layout/FormLayout";
+import SuccessModal from "@/Components/Modal/SuccessModal";
 import { Inertia } from "@inertiajs/inertia";
 import { usePage } from '@inertiajs/react';
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+
 export default function FormFaq() {
 
     const { props } = usePage();
     const id = props.id;
+    const [title, setTitle] = useState("Tambah Faq");
+    const [submitUrl, setSubmitUrl] = useState("/admin/faqs");
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
     const [formData, setFormData] = useState({
         pertanyaan: "",
         jawaban: "",
     });
-    const [title, setTitle] = useState("Tambah Faq");
-    const [submitUrl, setSubmitUrl] = useState("/admin/faqs");
 
-    const handleSubmit = async (e, formData) => {
-    e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
         const data = new FormData();
             Object.entries(formData).forEach(([key, value]) => {
                 if (value !== null) data.append(key, value);
             });
 
             try {
+                let res;
                 if (id) {
-                    // 🟢 Mode Edit → PUT
-                    await axios.post(`/admin/faqs/${id}`, data, {
+                    // Edit
+                    res = await axios.post(`/admin/faqs/${id}`, data, {
                         headers: { "X-HTTP-Method-Override": "PUT" },
                     });
-                    alert("Faq berhasil diperbarui!");
                 } else {
-                    // 🟢 Mode Tambah → POST
-                    await axios.post("/admin/faqs", data);
-                    alert("Faq berhasil ditambahkan!");
+                    // Tambah
+                    res = await axios.post("/admin/faqs", data);
                 }
 
-                // redirect ke halaman kelola faq
-                Inertia.visit("/admin/kelola-faq");
+                // tampilkan success modal
+                setSuccessMessage(res.data.message);
+                setShowSuccess(true);
+
+                // timer modal + callback untuk refresh table / close form
+                setTimeout(() => {
+                    setShowSuccess(false);
+                    Inertia.visit("/admin/kelola-faq"); // tetap redirect ke table setelah modal
+                }, 1500);
+
             } catch (error) {
                 console.error("Gagal kirim:", error);
             }
     };
+
 
 
     useEffect(() => {
@@ -75,13 +88,20 @@ export default function FormFaq() {
     ]);
 
     return (
-        <FormLayout
+        <>
+            <FormLayout
             title={title}
             fields={fields}
             formData={formData}
             submitUrl={submitUrl}
             setFormData={setFormData}
             onSubmit={handleSubmit}
-        />
+            />
+
+            <SuccessModal show={showSuccess} message={successMessage} />
+        </>
+
+
+
     );
 }

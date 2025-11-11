@@ -31,14 +31,16 @@ class DaftarAlatController extends Controller
 
         $fotoPath = $request->file('foto')->store('foto', 'public');
 
-        $nama_alat = DaftarAlat::create([
+        $daftar_alat = DaftarAlat::create([
             'nama_alat' => $request->nama_alat,
             'kategori' => $request->kategori,
             'foto' => $fotoPath,
         ]);
 
-        return redirect('/admin/kelola-daftar-alat')
-                        ->with('success', 'Data berhasil disimpan!');
+        return response()->json([
+            'message' => 'Daftar Alat berhasil ditambahkan!',
+            'daftar_alat' => $daftar_alat
+        ]);
     }
 
     public function index()

@@ -55,7 +55,7 @@ export default function ProsedurKerjaTable() {
                         key={header}
                         isHeader
                         className={`${
-                        header === "No" || header === "Tanggal Unggah" || header === "Action"
+                        header === "No" || header === "Tanggal Unggah" || header === "File" || header === "Action"
                             ? "text-center"
                             : "text-start"
                         }`}
@@ -80,7 +80,7 @@ export default function ProsedurKerjaTable() {
                                 {prosedurKerja.judul}
                             </TableCell>
 
-                            <TableCell>
+                            <TableCell className="text-center">
                                 <span className="italic text-gray-400">
                                 {prosedurKerja.dokumen_url ? (
                                     <a

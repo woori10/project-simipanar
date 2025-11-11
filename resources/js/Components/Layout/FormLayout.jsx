@@ -4,6 +4,7 @@ import { Head, usePage } from "@inertiajs/react";
 import { useState } from "react";
 import PrimaryButton from "../Button/PrimaryButton";
 import SecondaryButton from "../Button/SecondaryButton";
+import AutoCompleteInput from "../Input/AutoCompleteInput";
 
 export default function FormLayout({
   title,
@@ -205,7 +206,13 @@ export default function FormLayout({
                     </option>
                   ))}
                 </select>
-              ) : (
+              ) : field.type === "autocomplete" ? (
+                <AutoCompleteInput
+                    field={field}
+                    formData={formData}
+                    setFormData={setFormData}
+                />
+            ) : (
                 /* === TEXT INPUT === */
                 <input
                   type={field.type}

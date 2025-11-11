@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\UserRequest;
+use App\Mail\UserRequestPending;
+use Illuminate\Support\Facades\Mail;
 
 class RegisteredUserController extends Controller
 {
@@ -32,27 +35,28 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'email' => 'required|string|lowercase|email|max:255',
             'satker' => 'required|string',
-            'nip' => 'required|string|max:18|unique:users',
+            'nip' => 'required|string|max:18|unique:user_requests',
             'no_telp' => 'required|string|max:20',
             'password' => ['required', Rules\Password::defaults()],
-            // 'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
+        // Simpan ke tabel user_requests, bukan users
+        $userRequest = UserRequest::create([
             'name' => $request->name,
             'email' => $request->email,
             'satker' => $request->satker,
             'nip' => $request->nip,
             'no_telp' => $request->no_telp,
             'password' => Hash::make($request->password),
+            'role' => 'user', // default role
         ]);
 
-        event(new Registered($user));
+        // Kirim email notifikasi ke user (tunggu approval)
+        Mail::to($userRequest->email)->send(new UserRequestPending($userRequest));
 
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
+        // Jangan login otomatis
+        return redirect()->route('login')->with('status', 'Registrasi berhasil! Silakan tunggu konfirmasi admin.');
     }
 }

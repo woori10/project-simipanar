@@ -16,8 +16,11 @@ class FaqController extends Controller
 
         $faqs = Faq::create($data);
 
-        return redirect('/admin/kelola-faq')
-                        ->with('success', 'Data berhasil disimpan!');
+        return response()->json([
+            'message' => 'FAQ berhasil ditambahkan!',
+            'faq' => $faqs
+        ]);
+        
     }
 
     public function index()
@@ -60,8 +63,8 @@ class FaqController extends Controller
         $faqs->update($validated);
 
         return response()->json([
-            'message' => 'FAQ berhasil diperbarui',
-            'faqs'    => $faqs
+            'message' => 'FAQ berhasil diperbarui!',
+            'faq' => $faqs
         ]);
     }
 

@@ -47,11 +47,21 @@ export default function FaqTable() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            {["No", "Pertanyaan", "Jawaban", "Tanggal Unggah", "Action"].map((header) => (
-                                <TableCell key={header} isHeader className="text-center">
+                            {["No", "Pertanyaan", "Jawaban", "Tanggal Unggah", "Action"].map(
+                                (header) => (
+                                <TableCell
+                                    key={header}
+                                    isHeader
+                                    className={`${
+                                    header === "No" || header === "Tanggal Unggah" || header === "Action" || header === "Video"
+                                        ? "text-center"
+                                        : "text-start"
+                                    }`}
+                                >
                                     {header}
                                 </TableCell>
-                            ))}
+                                )
+                            )}
                         </TableRow>
                     </TableHeader>
 

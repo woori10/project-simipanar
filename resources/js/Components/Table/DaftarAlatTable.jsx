@@ -122,7 +122,7 @@ export default function DaftarAlatTable({ alats, onDeleteSuccess }) {
             show={showDeleteModal}
             onClose={() => setShowDeleteModal(false)}
             onConfirm={handleDelete}
-            message="Apakah kamu yakin ingin menghapus alat  ini?"
+            message="Semua data terkait alat ini akan terhapus, apakah anda yakin ingin menghapus alat ini?"
         />
 
         <SuccessModal

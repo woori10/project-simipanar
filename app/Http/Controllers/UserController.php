@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -10,9 +10,9 @@ class UserController extends Controller
 {
     public function store(Request $request)
     {
-         $data = $request->validate([
+        $data = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:users,email',
+            'email' => 'required|string|email|max:255|unique:users,email',
             'satker' => 'required|string',
             'nip' => 'required|string|max:18|unique:users,nip',
             'no_telp' => 'required|string|max:20',
@@ -20,10 +20,15 @@ class UserController extends Controller
             'password' => 'required|string|min:6',
         ]);
 
-        $users = User::create($data);
+        $data['email'] = strtolower($data['email']); // optional
+        $data['password'] = Hash::make($data['password']);
 
-        return redirect('/admin/kelola-user')
-                        ->with('success', 'User berhasil disimpan!');
+        $user = User::create($data);
+
+        return response()->json([
+            'message' => 'User berhasil ditambahkan',
+            'user' => $user
+        ]);
     }
 
     public function index()
@@ -59,8 +64,8 @@ class UserController extends Controller
             'nip' => 'string|max:18|unique:users,nip,' . $id,
             'no_telp' => 'string|max:20',
             'role' => 'string',
-            'password' => 'nullable|string|min:6',
         ]);
+
 
         $user->update([
             'name' => $request->name ?? $user->name,
@@ -69,18 +74,14 @@ class UserController extends Controller
             'nip' => $request->nip ?? $user->nip,
             'no_telp' => $request->no_telp ?? $user->no_telp,
             'role' => $request->role ?? $user->role,
-            'password' => $request->password ? Hash::make($request->password) : $user->password,
         ]);
 
         return response()->json([
             'message' => 'User berhasil diperbarui',
             'user' => $user
         ]);
-
-        // return inertia('Admin/UserForm', [
-        //     'id' => $id, // kirim id ke props inertia
-        // ]);
     }
+
 
     public function destroy ($id)
     {

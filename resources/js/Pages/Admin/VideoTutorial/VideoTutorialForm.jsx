@@ -1,4 +1,5 @@
 import FormLayout from "@/Components/Layout/FormLayout";
+import SuccessModal from "@/Components/Modal/SuccessModal";
 import { Inertia } from "@inertiajs/inertia";
 import { usePage } from "@inertiajs/react";
 import axios from "axios";
@@ -6,16 +7,18 @@ import { useEffect, useState } from "react";
 
 export default function FormVideoTutorial() {
 
-  const { props } = usePage();
-  const id = props.id;
-  const [alatOptions, setAlatOptions] = useState([]);
-  const [formData, setFormData] = useState({
-    daftar_alat_id: "",
-    judul_video: "",
-    video: null,
-  });
-  const [title, setTitle] = useState("Tambah Video Tutorial");
-  const [submitUrl, setSubmitUrl] = useState("/admin/video-tutorial");
+    const { props } = usePage();
+    const id = props.id;
+    const [alatOptions, setAlatOptions] = useState([]);
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
+    const [title, setTitle] = useState("Tambah Video Tutorial");
+    const [submitUrl, setSubmitUrl] = useState("/admin/video-tutorial");
+    const [formData, setFormData] = useState({
+        daftar_alat_id: "",
+        judul_video: "",
+        video: null,
+    });
 
   // Ambil daftar alat
   useEffect(() => {
@@ -56,28 +59,36 @@ export default function FormVideoTutorial() {
     }
   }, [id]);
 
-  const handleSubmit = async (e, formData) => {
+  const handleSubmit = async (e) => {
           e.preventDefault();
+
               const data = new FormData();
                   Object.entries(formData).forEach(([key, value]) => {
                       if (value !== null) data.append(key, value);
                   });
 
               try {
+                let res;
                   if (id) {
-                      await axios.post(`/admin/video-tutorial/${id}`, data, {
+                      res = await axios.post(`/admin/video-tutorial/${id}`, data, {
                           headers: { "X-HTTP-Method-Override": "PUT" },
                       });
-                      alert("Video Tutorial berhasil diperbarui!");
                   } else {
-                      await axios.post("/admin/video-tutorial", data);
-                      alert("Video Tutorial berhasil ditambahkan!");
+                      res = await axios.post("/admin/video-tutorial", data);
                   }
 
-                  Inertia.visit("/admin/kelola-video-tutorial");
-                  } catch (error) {
-                      console.error("Gagal kirim:", error);
-              }
+                  // tampilkan success modal
+                setSuccessMessage(res.data.message);
+                setShowSuccess(true);
+
+                // timer modal + callback untuk refresh table / close form
+                setTimeout(() => {
+                    setShowSuccess(false);
+                    Inertia.visit("/admin/kelola-video-tutorial"); // tetap redirect ke table setelah modal
+                }, 1500);
+              }catch (error) {
+                console.error("Gagal kirim:", error);
+            }
           };
 
   const fields = [
@@ -95,13 +106,19 @@ export default function FormVideoTutorial() {
   ];
 
   return (
-    <FormLayout
-      title={title}
-      fields={fields}
-      formData={formData}
-      submitUrl={submitUrl}
-      setFormData={setFormData}
-      onSubmit={handleSubmit}
-    />
+    <>
+        <FormLayout
+            title={title}
+            fields={fields}
+            formData={formData}
+            submitUrl={submitUrl}
+            setFormData={setFormData}
+            onSubmit={handleSubmit}
+        />
+
+        <SuccessModal show={showSuccess} message={successMessage} />
+
+    </>
+
   );
 }

@@ -1,6 +1,7 @@
 // import '../css/app.css';
 import 'flowbite';
 import 'flowbite-react';
+import { Toaster } from 'react-hot-toast';
 import '../css/index.css';
 import './bootstrap';
 
@@ -25,7 +26,7 @@ createInertiaApp({
        root.render(
       <>
         <App {...props} />
-        {/* <Toaster
+        <Toaster
           position="top-center"
           toastOptions={{
             style: {
@@ -33,7 +34,7 @@ createInertiaApp({
               color: '#000000',
             },
           }}
-        /> */}
+        />
       </>
     );
     },

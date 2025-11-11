@@ -33,9 +33,10 @@ class ModulDiklatController extends Controller
         ]);
 
 
-        return redirect()
-            ->route('admin.modulDiklat')
-            ->with('success', 'Modul diklat berhasil ditambahkan.');
+        return response()->json([
+            'message' => 'Modul Diklat berhasil ditambahkan!',
+            'data' => $modulDiklat
+        ]);
 
     }
 
@@ -97,14 +98,10 @@ class ModulDiklatController extends Controller
 
         $modulDiklat->save();
 
-        // return response()->json([
-        //     'message' => 'Materi Diklat Berhasil Diperbarui',
-        //     'data'    => $modulDiklat
-        // ]);
-
-        return redirect()
-            ->route('admin.modulDiklat')
-            ->with('success', 'Modul Diklat berhasil ditambahkan.');
+        return response()->json([
+            'message' => 'Modul Diklat berhasil diperbarui!',
+            'data' => $modulDiklat
+        ]);
     }
 
     public function destroy($id)

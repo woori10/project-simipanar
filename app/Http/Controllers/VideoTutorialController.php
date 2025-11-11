@@ -71,9 +71,10 @@ class VideoTutorialController extends Controller
             'video' => $fileVideoPath,
         ]);
 
-        return redirect()
-            ->route('admin.videoTutorial')
-            ->with('success', 'Video Tutorial berhasil ditambahkan.');
+        return response()->json([
+            'message' => 'Video berhasil ditambahkan!',
+            'data' => $videoTutorial
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -106,9 +107,10 @@ class VideoTutorialController extends Controller
 
         $video_tutorial->save();
 
-        return redirect()
-            ->route('admin.videoTutorial')
-            ->with('success', 'Video Tutorial berhasil diubah.');
+        return response()->json([
+            'message' => 'Video berhasil diperbarui!',
+            'data' => $video_tutorial
+        ]);
     }
 
     public function destroy($id)

@@ -42,7 +42,7 @@ export default function ModulDiklatTable({ moduls, onDeleteSuccess }) {
                         key={header}
                         isHeader
                         className={`${
-                        header === "No" || header === "Tanggal Unggah" || header === "Action"
+                        header === "No" || header === "Tanggal Unggah" || header === "Gambar" || header === "File" || header === "Action"
                             ? "text-center"
                             : "text-start"
                         }`}

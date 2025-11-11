@@ -4,16 +4,29 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 import logo from '../../../images/bea-cukai.png';
 import gedung from '../../../images/gedung_beacukai.jpg';
 
 export default function Login({ status, canResetPassword }) {
+    const { flash } = usePage().props;
     const { data, setData, post, processing, errors, reset } = useForm({
         nip: '',
         password: '',
         remember: false,
     });
+
+    useEffect(() => {
+        Object.entries(flash || {}).forEach(([key, message]) => {
+            if (key === 'success' || key === 'status') {
+                toast.success(message);
+            } else if (key === 'error') {
+                toast.error(message);
+            }
+        });
+    }, [flash]);
 
     const submit = (e) => {
         e.preventDefault();
@@ -33,6 +46,13 @@ export default function Login({ status, canResetPassword }) {
                 </div>
             )}
 
+
+
+            {flash?.success && (
+                <div className="bg-green-100 text-green-800 p-4 rounded mb-4">
+                {flash.success}
+                </div>
+            )}
             <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
 
                 {/* Foto */}

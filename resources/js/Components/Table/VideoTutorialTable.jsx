@@ -44,7 +44,7 @@ export default function VideoTutorialTable({ videos, onDeleteSuccess }) {
                         key={header}
                         isHeader
                         className={`${
-                        header === "No" || header === "Tanggal Unggah" || header === "Action"
+                        header === "No" || header === "Tanggal Unggah" || header === "Action" || header === "Video"
                             ? "text-center"
                             : "text-start"
                         }`}
@@ -89,7 +89,7 @@ export default function VideoTutorialTable({ videos, onDeleteSuccess }) {
                         </TableCell> */}
 
                         {/* Video */}
-                        <TableCell>
+                        <TableCell className="text-center">
                         {video.video ? (
                         <a
                             href={video.video}

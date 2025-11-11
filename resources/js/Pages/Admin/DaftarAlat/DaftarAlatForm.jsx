@@ -1,4 +1,5 @@
 import FormLayout from "@/Components/Layout/FormLayout";
+import SuccessModal from "@/Components/Modal/SuccessModal";
 import { Inertia } from "@inertiajs/inertia";
 import { usePage } from '@inertiajs/react';
 import axios from "axios";
@@ -8,52 +9,45 @@ export default function FormDaftarAlat() {
 
     const { props } = usePage();
     const id = props.id;
+    const [title, setTitle] = useState("Tambah Alat");
+    const [submitUrl, setSubmitUrl] = useState("/admin/daftar_alat");
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
     const [formData, setFormData] = useState({
         nama_alat: "",
         deskripsi: "",
         foto: null,
     });
-    const [title, setTitle] = useState("Tambah Alat");
-    const [submitUrl, setSubmitUrl] = useState("/admin/daftar_alat");
 
-    // const handleSubmit = (e, formData) => {
-    //     e.preventDefault();
-
-    //     const data = new FormData();
-    //     Object.entries(formData).forEach(([key, value]) => {
-    //       if (value !== null) data.append(key, value);
-    //     });
-
-    //     Inertia.post(submitUrl, data, {
-    //       onSuccess: () => {
-    //         console.log("Data berhasil disimpan!");
-    //       },
-    //       onError: (err) => console.error("Gagal kirim:", err),
-    //     });
-    //   };
-
-    const handleSubmit = async (e, formData) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
             const data = new FormData();
                 Object.entries(formData).forEach(([key, value]) => {
                     if (value !== null) data.append(key, value);
                 });
 
                 try {
+                    let res;
                     if (id) {
                         // 🟢 Mode Edit → PUT
-                        await axios.post(`/admin/daftar-alat/${id}`, data, {
+                        res = await axios.post(`/admin/daftar-alat/${id}`, data, {
                             headers: { "X-HTTP-Method-Override": "PUT" },
                         });
-                        alert("Daftar Alat berhasil diperbarui!");
                     } else {
                         // 🟢 Mode Tambah → POST
-                        await axios.post("/admin/daftar-alat", data);
-                        alert("Daftar Alat berhasil ditambahkan!");
+                        res = await axios.post("/admin/daftar-alat", data);
                     }
 
-                    // redirect ke halaman kelola faq
-                    Inertia.visit("/admin/kelola-daftar-alat");
+                    // tampilkan success modal
+                    setSuccessMessage(res.data.message);
+                    setShowSuccess(true);
+
+                    // timer modal + callback untuk refresh table / close form
+                    setTimeout(() => {
+                        setShowSuccess(false);
+                        Inertia.visit("/admin/kelola-daftar-alat"); // tetap redirect ke table setelah modal
+                    }, 1500);
                 } catch (error) {
                     console.error("Gagal kirim:", error);
                 }
@@ -99,13 +93,19 @@ export default function FormDaftarAlat() {
     ]);
 
   return (
-    <FormLayout
+    <>
+        <FormLayout
         title={title}
         fields={fields}
         formData={formData}
         submitUrl={submitUrl}
         setFormData={setFormData}
         onSubmit={handleSubmit}
-    />
+        />
+
+        <SuccessModal show={showSuccess} message={successMessage} />
+
+    </>
+
   );
 }

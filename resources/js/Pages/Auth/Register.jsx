@@ -4,10 +4,15 @@ import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import axios from "axios";
+import { useState } from "react";
 import logo from '../../../images/bea-cukai.png';
 import gedung from '../../../images/gedung_beacukai.jpg';
 
 export default function Register() {
+
+    const [suggestions, setSuggestions] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         nip:'',
@@ -25,6 +30,30 @@ export default function Register() {
             onFinish: () => reset('password'),
             // onFinish: () => reset('password', 'password_confirmation'),
         });
+    };
+
+    const handleSatkerChange = async (e) => {
+        const value = e.target.value;
+        setData('satker', value);
+
+        if (value.length < 2) {
+            setSuggestions([]);
+            setShowSuggestions(false);
+            return;
+        }
+
+        try {
+            const res = await axios.get(`/admin/satuan-kerja/search?query=${value}`);
+            setSuggestions(res.data);
+            setShowSuggestions(true);
+        } catch (err) {
+            console.error("Gagal ambil data satker:", err);
+        }
+    };
+
+    const handleSelectSatker = (namaSatker) => {
+        setData('satker', namaSatker);
+        setShowSuggestions(false);
     };
 
     return (
@@ -82,7 +111,7 @@ export default function Register() {
                             <InputError message={errors.nip} className="mt-2" />
                         </div>
 
-                        <div className="mt-2">
+                        <div className="mt-2 relative">
                             <InputLabel htmlFor="satker" className="text-main-blue" value="Satuan Kerja" />
 
                             <TextInput
@@ -90,15 +119,29 @@ export default function Register() {
                                 name="satker"
                                 value={data.satker}
                                 className="mt-1 block w-full h-10 text-gray-500"
-                                autoComplete="satker"
-                                isFocused={true}
-                                onChange={(e) => setData('satker', e.target.value)}
+                                autoComplete="off"
+                                onChange={handleSatkerChange}
                                 placeholder="Pilih Satuan Kerja"
                                 required
                             />
 
+                            {showSuggestions && suggestions.length > 0 && (
+                                <ul className="absolute z-20 w-full bg-white border border-gray-300 rounded-md mt-1 max-h-48 overflow-y-auto shadow-md">
+                                    {suggestions.map((item) => (
+                                        <li
+                                            key={item.id}
+                                            onClick={() => handleSelectSatker(item.satker)}
+                                            className="px-3 py-2 text-gray-800 hover:bg-blue-600 hover:text-white cursor-pointer transition-colors"
+                                        >
+                                            {item.satker}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+
                             <InputError message={errors.satker} className="mt-2" />
                         </div>
+
 
                         <div className="mt-2">
                             <InputLabel  htmlFor="email" className="text-main-blue" value="Email" />

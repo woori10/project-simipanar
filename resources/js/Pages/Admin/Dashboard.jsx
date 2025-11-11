@@ -116,7 +116,7 @@ export default function Dashboard({ title }) {
                 <UserCard />
                 <UserCard />
                 <UserCard />
-        </div>
+            </div>
 
             <h1 className="text-lg text-main-blue font-extrabold">User Request</h1>
             <ReqUserTable />

@@ -67,9 +67,9 @@ const AppSidebar = () => {
         name: "Video Tutorial",
         icon: <VideoTutorialIcon />,
         subItems: daftarAlat.map(alat => ({
-        name: alat.nama_alat,
-        path: `/user/video-tutorial/${alat.id}`, // pakai id
-        pro: false,
+            name: alat.nama_alat,
+            path: `/user/video-tutorial/${alat.id}`, // pakai id
+            pro: false,
         })),
     },
     {
@@ -95,7 +95,7 @@ const AppSidebar = () => {
 
 
     useEffect(() => {
-    fetch('/admin/daftar-alat') // route web Laravel yang sudah ada
+    fetch('/user/daftar-alat') // route web Laravel yang sudah ada
             .then(res => {
                 if (!res.ok) throw new Error('Network response was not ok');
                 return res.json();
@@ -106,29 +106,34 @@ const AppSidebar = () => {
 
 
 
-  useEffect(() => {
-    let submenuMatched = false;
-    ["main", "others"].forEach((menuType) => {
-      const items = menuType === "main" ? navItems : othersItems;
-      items.forEach((nav, index) => {
-        if (nav.subItems) {
-          nav.subItems.forEach((subItem) => {
-            if (isActive(subItem.path)) {
-              setOpenSubmenu({
-                type: menuType,
-                index,
-              });
-              submenuMatched = true;
-            }
-          });
-        }
-      });
-    });
+    useEffect(() => {
+        let found = false;
 
-    if (!submenuMatched) {
-      setOpenSubmenu(null);
-    }
-  }, [location, isActive]);
+        ["main", "others"].forEach((menuType) => {
+            const items = menuType === "main" ? navItems : othersItems;
+
+            items.forEach((nav, index) => {
+            if (nav.subItems) {
+                nav.subItems.forEach((subItem) => {
+                if (isActive(subItem.path)) {
+                    // kalau URL cocok dengan salah satu subItem
+                    setOpenSubmenu({
+                    type: menuType,
+                    index,
+                    });
+                    found = true;
+                }
+                });
+            }
+            });
+        });
+
+        // kalau nggak cocok, jangan langsung null-in biar gak ketutup
+        if (!found && openSubmenu === null) {
+            setOpenSubmenu(null);
+        }
+    }, [location.pathname]);
+
 
   useEffect(() => {
     if (openSubmenu !== null) {
@@ -173,7 +178,7 @@ const AppSidebar = () => {
               }`}
             >
               <span
-                className={`menu-item-icon-size  ${
+                className={`menu-item-icon-size ${
                   openSubmenu?.type === menuType && openSubmenu?.index === index
                     ? "menu-item-icon-active"
                     : "menu-item-icon-inactive"
@@ -189,7 +194,7 @@ const AppSidebar = () => {
                   className={`ml-auto w-5 h-5 transition-transform duration-200 ${
                     openSubmenu?.type === menuType &&
                     openSubmenu?.index === index
-                      ? "rotate-180 text-brand-500"
+                      ? "rotate-180 text-main-blue"
                       : ""
                   }`}
                 />
@@ -223,7 +228,7 @@ const AppSidebar = () => {
              ref={(el) => {
                 subMenuRefs.current[`${menuType}-${index}`] = el;
                 }}
-              className="overflow-hidden transition-all duration-300"
+              className="overflow-hidden transition-all duration-300 mt-2"
               style={{
                 height:
                   openSubmenu?.type === menuType && openSubmenu?.index === index

@@ -24,6 +24,7 @@ export default function Faq() {
                 key={faq.id}
                 className="bg-white border border-gray-200 rounded-lg shadow-sm"
               >
+                {/* Pertanyaan */}
                 <button
                   onClick={() => toggleFaq(index)}
                   className="w-full flex items-center justify-between p-4 text-left"
@@ -32,17 +33,22 @@ export default function Faq() {
                     {faq.pertanyaan}
                   </span>
                   <ChevronDownIcon
-                    className={`h-5 w-5 text-gray-500 transform transition-transform ${
+                    className={`h-5 w-5 text-gray-500 transform transition-transform duration-300 ${
                       openIndex === index ? "rotate-180" : ""
                     }`}
                   />
                 </button>
 
-                {openIndex === index && (
+                {/* Jawaban dengan animasi smooth */}
+                <div
+                  className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                    openIndex === index ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                  }`}
+                >
                   <div className="px-4 pb-4 text-gray-600">
                     {faq.jawaban}
                   </div>
-                )}
+                </div>
               </div>
             ))
           )}

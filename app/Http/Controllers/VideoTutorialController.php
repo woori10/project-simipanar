@@ -129,18 +129,15 @@ class VideoTutorialController extends Controller
     public function indexUser()
     {
         $alatList = DaftarAlat::withCount('videoTutorial')->get();
-        $firstAlat = $alatList->first();
 
-        $videos = $firstAlat
-            ? VideoTutorial::where('daftar_alat_id', $firstAlat->id)->get()->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'judul_video' => $item->judul_video,
-                    'video' => asset('storage/' . $item->video),
-                    'foto' => $item->foto ? asset('storage/' . $item->foto) : null,
-                ];
-            })
-            : [];
+        $videos = VideoTutorial::with('daftarAlat')->get()->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'judul_video' => $item->judul_video,
+                'video' => $item->video ? asset('storage/' . $item->video) : null,
+                'foto' => $item->foto ? asset('storage/' . $item->foto) : null,
+            ];
+        });
 
         return Inertia::render('User/VideoTutorial', [
             'alats' => $alatList,

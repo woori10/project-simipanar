@@ -90,6 +90,10 @@ Route::get('/user/video-tutorial/{alat_id}', [VideoTutorialController::class, 's
 //     });
 // })->middleware(['auth', 'verified'])->name('user.videoTutorial');
 
+Route::get('/user/daftar-alat', [DaftarAlatController::class, 'listAlatUser'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.daftarAlat');
+
 Route::get('/user/video-tutorial', function () {
     return Inertia::render('User/VideoTutorial');
 })->middleware(['auth', 'verified'])->name('user.videoTutorial');

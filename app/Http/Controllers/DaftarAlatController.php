@@ -113,4 +113,12 @@ class DaftarAlatController extends Controller
             'message' => 'Alat Berhasil Dihapus'
         ]);
     }
+
+    public function listAlatUser()
+    {
+        // ambil hanya data penting aja
+        $alat = \App\Models\DaftarAlat::select('id', 'nama_alat', 'foto', 'kategori')->get();
+
+        return response()->json(['alats' => $alat]);
+    }
 }

@@ -1,5 +1,6 @@
 import VideoTutorialCard from "@/Components/Card/VideoTutorialCard";
 import AppLayout from "@/Components/Layout/UserLayout";
+import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { usePage } from "@inertiajs/react";
 import { useState } from "react";
 
@@ -34,13 +35,16 @@ export default function VideoTutorial() {
   // Kalau video diklik → tampilkan preview
   return (
     <AppLayout>
-      <div className="flex items-center mb-4">
-        <button
-          onClick={() => setSelectedVideo(null)}
-          className="flex items-center text-gray-600 hover:text-gray-800 transition"
-        >
-          ← <span className="ml-2 font-bold">{selectedVideo.judul_video}</span>
-        </button>
+      <div className="flex items-centers">
+        <div className="flex items-center mb-4">
+            <button
+            onClick={() => setSelectedVideo(null)}
+            className="flex items-center gap-2 py-2 rounded-lg text-gray-700 transition"
+            >
+            <ChevronLeftIcon className="h-5 w-5" />
+            <span className="font-bold">Kembali</span>
+            </button>
+        </div>
       </div>
 
       <div className="border rounded-lg shadow-sm overflow-hidden">

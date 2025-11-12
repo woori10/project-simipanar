@@ -3,7 +3,8 @@ export default function VideoTutorialCard({ judul_video, thumbnail, onClick }) {
   return (
         <div
             onClick={onClick}
-            className="rounded-2xl border border-gray-200 bg-white p-5 min-w-max dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+            className="rounded-2xl border border-gray-200 bg-white p-5 min-w-max md:p-6 cursor-pointer hover:shadow-md transition"
+        >
             <div className="mx-auto flex items-center justify-center w-full h-40 bg-gray-100 rounded-xl dark:bg-gray-800">
                 <img
                     src={thumbnail || '/default-image.png'}

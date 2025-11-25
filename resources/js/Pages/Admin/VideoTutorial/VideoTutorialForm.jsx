@@ -1,4 +1,6 @@
+import AlertModalHooks from "@/Components/Hooks/AlertModalHooks";
 import FormLayout from "@/Components/Layout/FormLayout";
+import AlertModal from "@/Components/Modal/AlertModal";
 import SuccessModal from "@/Components/Modal/SuccessModal";
 import { Inertia } from "@inertiajs/inertia";
 import { usePage } from "@inertiajs/react";
@@ -14,6 +16,7 @@ export default function FormVideoTutorial() {
     const [successMessage, setSuccessMessage] = useState("");
     const [title, setTitle] = useState("Tambah Video Tutorial");
     const [submitUrl, setSubmitUrl] = useState("/admin/video-tutorial");
+    const { alert, showAlert } = AlertModalHooks();
     const [formData, setFormData] = useState({
         daftar_alat_id: "",
         judul_video: "",
@@ -59,37 +62,55 @@ export default function FormVideoTutorial() {
     }
   }, [id]);
 
-  const handleSubmit = async (e) => {
-          e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-              const data = new FormData();
-                  Object.entries(formData).forEach(([key, value]) => {
-                      if (value !== null) data.append(key, value);
-                  });
+        // VALIDASI PER-FIELD
+        if (!formData.judul_video) {
+            showAlert("Judul video wajib diisi");
+            return;
+        }
 
-              try {
-                let res;
-                  if (id) {
-                      res = await axios.post(`/admin/video-tutorial/${id}`, data, {
-                          headers: { "X-HTTP-Method-Override": "PUT" },
-                      });
-                  } else {
-                      res = await axios.post("/admin/video-tutorial", data);
-                  }
+        if (!formData.daftar_alat_id) {
+            showAlert("Nama alat wajib dipilih");
+            return;
+        }
 
-                  // tampilkan success modal
-                setSuccessMessage(res.data.message);
-                setShowSuccess(true);
+        // jika TAMBAH → file video wajib
+        if (!id && !formData.video) {
+            showAlert("Video wajib diupload");
+            return;
+        }
 
-                // timer modal + callback untuk refresh table / close form
-                setTimeout(() => {
-                    setShowSuccess(false);
-                    Inertia.visit("/admin/kelola-video-tutorial"); // tetap redirect ke table setelah modal
-                }, 1500);
-              }catch (error) {
-                console.error("Gagal kirim:", error);
+        const data = new FormData();
+        Object.entries(formData).forEach(([key, value]) => {
+            if (value !== null) data.append(key, value);
+        });
+
+        try {
+            let res;
+
+            if (id) {
+                res = await axios.post(`/admin/video-tutorial/${id}`, data, {
+                    headers: { "X-HTTP-Method-Override": "PUT" },
+                });
+            } else {
+                res = await axios.post("/admin/video-tutorial", data);
             }
-          };
+
+            setSuccessMessage(res.data.message);
+            setShowSuccess(true);
+
+            setTimeout(() => {
+                setShowSuccess(false);
+                Inertia.visit("/admin/kelola-video-tutorial");
+            }, 1500);
+
+        } catch (error) {
+            console.error("Gagal kirim:", error);
+        }
+    };
+
 
   const fields = [
     { label: "Judul Video", name: "judul_video", type: "text", placeholder: "Masukkan judul video" },
@@ -117,6 +138,8 @@ export default function FormVideoTutorial() {
         />
 
         <SuccessModal show={showSuccess} message={successMessage} />
+
+        <AlertModal show={alert.show} message={alert.message} />
 
     </>
 

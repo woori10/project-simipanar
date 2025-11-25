@@ -21,10 +21,6 @@ class UserApproved extends Mailable
     public function build()
     {
         return $this->subject('Akses Simipanar Diberikan')
-                    ->html(
-                        "<p>Hai {$this->user->name},</p>
-                        <p>Akses ke Simipanar Anda sudah diberikan. Silakan login melalui link berikut:</p>
-                        <p><a href='" . url('/login') . "'>Login</a></p>"
-                    );
+                    ->markdown('emails.user-approved');
     }
 }

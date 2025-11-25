@@ -21,10 +21,6 @@ class UserRequestPending extends Mailable
     public function build()
     {
         return $this->subject('Pendaftaran Anda Sedang Diproses')
-                    ->html(
-                        "<p>Hai {$this->userRequest->name},</p>
-                        <p>Terima kasih telah mendaftar. Akun Anda sedang menunggu konfirmasi admin dalam 24 jam.</p>
-                        <p>Silakan tunggu informasi lebih lanjut.</p>"
-                    );
+                    ->markdown('emails.user-request-pending');
     }
 }

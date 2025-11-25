@@ -16,6 +16,8 @@ use App\Http\Controllers\DashboardController;
 use \App\Http\Controllers\SatuanKerjaController;
 use App\Http\Controllers\RegisterRequestController;
 use App\Http\Controllers\AdminUserRequestController;
+use App\Http\Controllers\NotificationController;
+use App\Models\Notification;
 
 
 // Route::get('/', function () {
@@ -50,6 +52,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/profile/edit-info', function () {
+    return Inertia::render('Profile/UpdateProfileInformationForm', [
+        'user' => auth()->user(),
+    ]);
+})->name('profile.edit.info');
+
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 });
@@ -66,11 +74,9 @@ Route::get('/user/modul-diklat', [ModulDiklatController::class, 'indexUser'])
     ->middleware(['auth', 'verified'])
     ->name('user.modulDiklat');
 
-Route::get('/user/faq', function () {
-    return Inertia::render('User/Faq', [
-        'faqs' => \App\Models\Faq::all(),
-    ]);
-});
+Route::get('/user/faq', [FaqController::class, 'indexUser'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.modulDiklat');
 
 // Semua video tutorial per user
 Route::get('/user/video-tutorial', [VideoTutorialController::class, 'indexUser'])
@@ -81,22 +87,21 @@ Route::get('/user/video-tutorial', [VideoTutorialController::class, 'indexUser']
 Route::get('/user/video-tutorial/{alat_id}', [VideoTutorialController::class, 'showByAlat'])
     ->middleware(['auth', 'verified'])
     ->name('user.videoTutorial.show');
-// Route::prefix('video-tutorial')->group(function () {
-//     Route::get('/ion-scan', function () {
-//         return Inertia::render('User/VideoTutorial/IonScan');
-//     });
-//     Route::get('/hamzat', function () {
-//         return Inertia::render('User/VideoTutorial/Hamzat');
-//     });
-// })->middleware(['auth', 'verified'])->name('user.videoTutorial');
 
 Route::get('/user/daftar-alat', [DaftarAlatController::class, 'listAlatUser'])
     ->middleware(['auth', 'verified'])
     ->name('user.daftarAlat');
 
-Route::get('/user/video-tutorial', function () {
-    return Inertia::render('User/VideoTutorial');
-})->middleware(['auth', 'verified'])->name('user.videoTutorial');
+Route::get('/notifications', [NotificationController::class, 'index']);
+Route::post('/notifications', [NotificationController::class, 'store']);
+Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead']);
+
+Route::get('/dashboard/counts', [DashboardController::class, 'getCounts'])->name('dashboard.counts');
+
+// Route::get('/user/video-tutorial', function () {
+//     return Inertia::render('User/VideoTutorial');
+// })->middleware(['auth', 'verified'])->name('user.videoTutorial');
 
 // ADMIN
 
@@ -106,7 +111,6 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
         return Inertia::render('Admin/Dashboard');
     })->name('admin.dashboard');
 
-    Route::get('/admin/dashboard/counts', [DashboardController::class, 'getCounts'])->name('admin.dashboard.counts');
 
     // Request User
 

@@ -7,6 +7,7 @@ use App\Models\DaftarAlat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use App\Models\Notification;
 
 class ModulDiklatController extends Controller
 {
@@ -23,13 +24,18 @@ class ModulDiklatController extends Controller
         // Simpan file PDF ke storage/public/file_pdf
         $filePDFPath = $request->file('dokumen')->store('dokumen', 'public');
 
-
         // Simpan ke tabel materi_diklat
         $modulDiklat = ModulDiklat::create([
             'daftar_alat_id' => $alat->id,
             'nama_alat'      => $alat->nama_alat,
             'foto'           => $alat->foto,
             'dokumen'       => $filePDFPath,
+        ]);
+
+        Notification::create([
+            'type'    => 'modul_diklat',
+            'message' => 'Modul baru telah ditambahkan: ' . $alat->nama_alat,
+            'is_read' => false,
         ]);
 
 

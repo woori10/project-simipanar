@@ -97,7 +97,7 @@ export default function FaqTable() {
                         ) : (
                             <TableRow>
                                 <TableCell colSpan="4" className="text-center py-4 text-gray-400">
-                                    Tidak ada data FAQ.
+                                    {/* Tidak ada data FAQ. */}
                                 </TableCell>
                             </TableRow>
                         )}

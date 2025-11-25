@@ -37,7 +37,7 @@ class AdminUserRequestController extends Controller
         // Kirim email info akses diberikan
         Mail::to($user->email)->send(new \App\Mail\UserApproved($user));
 
-        return response()->json(['message' => 'User disetujui dan bisa login']);
+        return response()->json(['message' => 'User berhasil diberikan akses.']);
     }
 
     public function reject($id)
@@ -46,6 +46,6 @@ class AdminUserRequestController extends Controller
         $request->status = 'rejected';
         $request->save();
 
-        return response()->json(['message' => 'User ditolak']);
+        return response()->json(['message' => 'User berhasil ditolak.']);
     }
 }

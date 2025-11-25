@@ -1,30 +1,29 @@
-
 export default function VideoTutorialCard({ judul_video, thumbnail, onClick }) {
-  return (
+    const finalThumbnail = thumbnail
+        ? (thumbnail.startsWith('http') ? thumbnail : `/storage/${thumbnail}`)
+        : '/default-image.png';
+
+    return (
         <div
             onClick={onClick}
-            className="rounded-2xl border border-gray-200 bg-white p-5 min-w-max md:p-6 cursor-pointer hover:shadow-md transition"
+            className="w-full sm:w-[250px] h-[320px] rounded-2xl border border-gray-200 bg-white p-5 md:p-6 cursor-pointer hover:shadow-sm transition flex flex-col"
         >
-            <div className="mx-auto flex items-center justify-center w-full h-40 bg-gray-100 rounded-xl dark:bg-gray-800">
+            {/* FIX ukuran kotak gambar */}
+            <div className="w-full h-[160p] rounded-xl flex items-center justify-center overflow-hidden">
                 <img
-                    src={thumbnail || '/default-image.png'}
+                    src={finalThumbnail}
                     alt={judul_video}
-                    className="w-full h-full object-cover"
+                    className="max-w-full max-h-full object-contain"
                 />
             </div>
 
-            <div className="text-center mt-5">
-                <div>
-                    <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
+            {/* Judul */}
+            <div className="mt-auto text-center">
+                <h4 className="font-bold text-gray-800 text-title-sm">
                     {judul_video}
-                    </h4>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                    Klik untuk Lihat
-                    </span>
-                </div>
+                </h4>
+                <span className="text-sm text-gray-500">Klik untuk Lihat</span>
             </div>
         </div>
-
-
-  );
+    );
 }

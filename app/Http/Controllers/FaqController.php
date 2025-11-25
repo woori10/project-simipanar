@@ -20,7 +20,7 @@ class FaqController extends Controller
             'message' => 'FAQ berhasil ditambahkan!',
             'faq' => $faqs
         ]);
-        
+
     }
 
     public function index()
@@ -75,6 +75,22 @@ class FaqController extends Controller
 
         return response()->json([
             'message' => 'FAQ berhasil dihapus'
+        ]);
+    }
+
+    public function indexUser()
+    {
+        $faqs = \App\Models\Faq::latest()->get()->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'pertanyaan' => $item->pertanyaan,
+                'jawaban' => $item->jawaban,
+                'tanggal' => $item->created_at->format('Y-m-d'),
+            ];
+        });
+
+        return inertia('User/Faq', [
+            'faqs' => $faqs,
         ]);
     }
 }

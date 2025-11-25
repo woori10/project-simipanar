@@ -1,4 +1,6 @@
+import AlertModalHooks from "@/Components/Hooks/AlertModalHooks";
 import FormLayout from "@/Components/Layout/FormLayout";
+import AlertModal from "@/Components/Modal/AlertModal";
 import SuccessModal from "@/Components/Modal/SuccessModal";
 import { Inertia } from "@inertiajs/inertia";
 import { usePage } from '@inertiajs/react';
@@ -14,6 +16,7 @@ export default function FormFaq() {
     const [submitUrl, setSubmitUrl] = useState("/admin/faqs");
     const [showSuccess, setShowSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
+    const { alert, showAlert } = AlertModalHooks();
     const [formData, setFormData] = useState({
         pertanyaan: "",
         jawaban: "",
@@ -22,38 +25,47 @@ export default function FormFaq() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!formData.pertanyaan) {
+            showAlert("Pertanyaan wajib terisi");
+            return; // stop submit
+        }
+
+        if (!formData.jawaban) {
+            showAlert("Jawaban wajib terisi");
+            return; // stop submit
+        }
+
         const data = new FormData();
-            Object.entries(formData).forEach(([key, value]) => {
-                if (value !== null) data.append(key, value);
-            });
+        Object.entries(formData).forEach(([key, value]) => {
+            if (value !== null) data.append(key, value);
+        });
 
-            try {
-                let res;
-                if (id) {
-                    // Edit
-                    res = await axios.post(`/admin/faqs/${id}`, data, {
-                        headers: { "X-HTTP-Method-Override": "PUT" },
-                    });
-                } else {
-                    // Tambah
-                    res = await axios.post("/admin/faqs", data);
-                }
+        try {
+            let res;
 
-                // tampilkan success modal
-                setSuccessMessage(res.data.message);
-                setShowSuccess(true);
-
-                // timer modal + callback untuk refresh table / close form
-                setTimeout(() => {
-                    setShowSuccess(false);
-                    Inertia.visit("/admin/kelola-faq"); // tetap redirect ke table setelah modal
-                }, 1500);
-
-            } catch (error) {
-                console.error("Gagal kirim:", error);
+            if (id) {
+                // Edit
+                res = await axios.post(`/admin/faqs/${id}`, data, {
+                    headers: { "X-HTTP-Method-Override": "PUT" },
+                });
+            } else {
+                // Tambah
+                res = await axios.post("/admin/faqs", data);
             }
-    };
 
+            // success modal
+            setSuccessMessage(res.data.message);
+            setShowSuccess(true);
+
+            setTimeout(() => {
+                setShowSuccess(false);
+                Inertia.visit("/admin/kelola-faq");
+            }, 1500);
+
+        } catch (error) {
+            console.error("Gagal kirim:", error);
+        }
+    };
 
 
     useEffect(() => {
@@ -82,6 +94,14 @@ export default function FormFaq() {
         }
     }, [id]);
 
+    // const showAlert = (message, type = "error") => {
+    //     setAlert({ show: true, message, type });
+
+    //     setTimeout(() => {
+    //         setAlert({ show: false, message: "", type });
+    //     }, 2500);
+    // };
+
     const fields = ([
         { label: "Pertanyaan", name: "pertanyaan", type: "text", placeholder: "Masukkan pertanyaan" },
         { label: "Jawaban", name: "jawaban", type: "text", placeholder: "Masukkan jawaban" },
@@ -99,6 +119,9 @@ export default function FormFaq() {
             />
 
             <SuccessModal show={showSuccess} message={successMessage} />
+
+            <AlertModal show={alert.show} message={alert.message} />
+
         </>
 
 

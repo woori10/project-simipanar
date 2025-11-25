@@ -1,4 +1,6 @@
+import AlertModalHooks from "@/Components/Hooks/AlertModalHooks";
 import FormLayout from "@/Components/Layout/FormLayout";
+import AlertModal from "@/Components/Modal/AlertModal";
 import SuccessModal from "@/Components/Modal/SuccessModal";
 import { Inertia } from "@inertiajs/inertia";
 import { usePage } from '@inertiajs/react';
@@ -13,6 +15,7 @@ export default function FormUser() {
     const [submitUrl, setSubmitUrl] = useState("/admin/users");
     const [showSuccess, setShowSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
+    const { alert, showAlert } = AlertModalHooks();
     const [formData, setFormData] = useState({
         name:"",
         nip:"",
@@ -34,39 +37,66 @@ export default function FormUser() {
     ]);
 
     const handleSubmit = async (e) => {
-            e.preventDefault();
+        e.preventDefault();
 
-            const data = new FormData();
-                Object.entries(formData).forEach(([key, value]) => {
-                    if (value !== null) data.append(key, value);
+        if (!formData.name) {
+            showAlert("Nama wajib diisi");
+            return;
+        }
+        if (!formData.nip) {
+            showAlert("NIP wajib diisi");
+            return;
+        }
+        if (!formData.email) {
+            showAlert("Email wajib diisi");
+            return;
+        }
+        if (!formData.satker) {
+            showAlert("Satuan kerja wajib diisi");
+            return;
+        }
+        if (!formData.no_telp) {
+            showAlert("Nomor telepon wajib diisi");
+            return;
+        }
+        if (!formData.role) {
+            showAlert("Role wajib diisi");
+            return;
+        }
+
+        if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            showAlert("Format email tidak valid");
+            return;
+        }
+
+        const data = new FormData();
+        Object.entries(formData).forEach(([key, value]) => {
+            if (value !== null) data.append(key, value);
+        });
+
+        try {
+            let res;
+            if (id) {
+                res = await axios.post(`/admin/users/${id}`, data, {
+                    headers: { "X-HTTP-Method-Override": "PUT" },
                 });
+            } else {
+                res = await axios.post("/admin/users", data);
+            }
 
-                try {
-                    let res;
-                    if (id) {
-                        // Edit
-                        res = await axios.post(`/admin/users/${id}`, data, {
-                            headers: { "X-HTTP-Method-Override": "PUT" },
-                        });
-                    } else {
-                        // Tambah
-                        res = await axios.post("/admin/users", data);
-                    }
+            setSuccessMessage(res.data.message);
+            setShowSuccess(true);
 
-                    // tampilkan success modal
-                    setSuccessMessage(res.data.message);
-                    setShowSuccess(true);
+            setTimeout(() => {
+                setShowSuccess(false);
+                Inertia.visit("/admin/kelola-user");
+            }, 1500);
 
-                    // timer modal + callback untuk refresh table / close form
-                    setTimeout(() => {
-                        setShowSuccess(false);
-                        Inertia.visit("/admin/kelola-user"); // tetap redirect ke table setelah modal
-                    }, 1500);
+        } catch (error) {
+            console.error("Gagal kirim:", error);
+        }
+    };
 
-                } catch (error) {
-                    console.error("Gagal kirim:", error);
-                }
-        };
 
     useEffect(() => {
         if (id) {
@@ -114,6 +144,8 @@ export default function FormUser() {
             />
 
             <SuccessModal show={showSuccess} message={successMessage} />
+            <AlertModal show={alert.show} message={alert.message} />
+
         </>
 
     );

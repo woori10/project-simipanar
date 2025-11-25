@@ -1,9 +1,10 @@
 import PrimaryButton from '@/Components/Button/PrimaryButton';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
+import SuccessModal from '@/Components/Modal/SuccessModal';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import axios from "axios";
 import { useState } from "react";
 import logo from '../../../images/bea-cukai.png';
@@ -11,30 +12,62 @@ import gedung from '../../../images/gedung_beacukai.jpg';
 
 export default function Register() {
 
-    const [suggestions, setSuggestions] = useState([]);
-    const [showSuggestions, setShowSuggestions] = useState(false);
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const [data, setData] = useState({
         name: '',
-        nip:'',
-        satker:'',
-        no_telp:'',
+        nip: '',
+        satker: '',
+        no_telp: '',
         email: '',
         password: '',
-        // password_confirmation: '',
     });
 
-    const submit = (e) => {
+    const [errors, setErrors] = useState({});
+    const [suggestions, setSuggestions] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
+
+    const handleChange = (field, value) => {
+        setData({ ...data, [field]: value });
+    };
+
+    const submit = async (e) => {
         e.preventDefault();
 
-        post(route('register'), {
-            onFinish: () => reset('password'),
-            // onFinish: () => reset('password', 'password_confirmation'),
-        });
+        try {
+            const res = await axios.post(route('register'), data);
+
+            // tampilkan modal
+            setSuccessMessage(res.data.message);
+            setShowSuccess(true);
+
+            // reset form
+            setData({
+                name: '',
+                nip: '',
+                satker: '',
+                no_telp: '',
+                email: '',
+                password: '',
+            });
+
+            setErrors({});
+            setSuggestions([]);
+
+            // auto-close modal 3 detik
+            setTimeout(() => setShowSuccess(false), 3000);
+
+        } catch (err) {
+            if (err.response?.status === 422) {
+                setErrors(err.response.data.errors);
+            }
+        }
     };
 
     const handleSatkerChange = async (e) => {
         const value = e.target.value;
-        setData('satker', value);
+        handleChange('satker', value);
 
         if (value.length < 2) {
             setSuggestions([]);
@@ -52,13 +85,18 @@ export default function Register() {
     };
 
     const handleSelectSatker = (namaSatker) => {
-        setData('satker', namaSatker);
+        handleChange('satker', namaSatker);
         setShowSuggestions(false);
     };
 
     return (
         <GuestLayout>
             <Head title="Register" />
+
+            <SuccessModal
+                show={showSuccess}
+                message={successMessage}
+            />
 
             <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
 
@@ -75,48 +113,40 @@ export default function Register() {
                     </div>
 
                     <form onSubmit={submit}>
+
+                        {/* Name */}
                         <div className="mt-2">
                             <InputLabel htmlFor="name" className="text-main-blue" value="Nama Lengkap" />
-
                             <TextInput
                                 id="name"
-                                name="name"
                                 value={data.name}
                                 className="mt-1 block w-full h-10 text-gray-500"
-                                autoComplete="name"
-                                isFocused={true}
-                                onChange={(e) => setData('name', e.target.value)}
+                                onChange={(e) => handleChange('name', e.target.value)}
                                 placeholder="Masukkan Nama Lengkap"
                                 required
                             />
-
                             <InputError message={errors.name} className="mt-2" />
                         </div>
 
+                        {/* NIP */}
                         <div className="mt-2">
                             <InputLabel htmlFor="nip" className="text-main-blue" value="NIP" />
-
                             <TextInput
                                 id="nip"
-                                name="nip"
                                 value={data.nip}
                                 className="mt-1 block w-full h-10 text-gray-500"
-                                autoComplete="nip"
-                                isFocused={true}
-                                onChange={(e) => setData('nip', e.target.value)}
+                                onChange={(e) => handleChange('nip', e.target.value)}
                                 placeholder="Masukkan NIP"
                                 required
                             />
-
                             <InputError message={errors.nip} className="mt-2" />
                         </div>
 
+                        {/* Satker */}
                         <div className="mt-2 relative">
                             <InputLabel htmlFor="satker" className="text-main-blue" value="Satuan Kerja" />
-
                             <TextInput
                                 id="satker"
-                                name="satker"
                                 value={data.satker}
                                 className="mt-1 block w-full h-10 text-gray-500"
                                 autoComplete="off"
@@ -142,100 +172,62 @@ export default function Register() {
                             <InputError message={errors.satker} className="mt-2" />
                         </div>
 
-
+                        {/* Email */}
                         <div className="mt-2">
-                            <InputLabel  htmlFor="email" className="text-main-blue" value="Email" />
-
+                            <InputLabel htmlFor="email" className="text-main-blue" value="Email" />
                             <TextInput
                                 id="email"
                                 type="email"
-                                name="email"
                                 value={data.email}
                                 className="mt-1 block w-full h-10 text-gray-500"
-                                autoComplete="username"
-                                onChange={(e) => setData('email', e.target.value)}
+                                onChange={(e) => handleChange('email', e.target.value)}
                                 placeholder="Masukkan Email"
                                 required
                             />
-
                             <InputError message={errors.email} className="mt-2" />
                         </div>
 
+                        {/* No Telp */}
                         <div className="mt-2">
                             <InputLabel htmlFor="no_telp" className="text-main-blue" value="No Telpon" />
-
                             <TextInput
                                 id="no_telp"
-                                type="tel"
-                                name="No Telp"
                                 value={data.no_telp}
                                 className="mt-1 block w-full h-10 text-gray-500"
-                                autoComplete="no_telp"
-                                onChange={(e) => setData('no_telp', e.target.value)}
+                                onChange={(e) => handleChange('no_telp', e.target.value)}
                                 placeholder="Masukkan Nomor Telpon"
                                 required
                             />
-
                             <InputError message={errors.no_telp} className="mt-2" />
                         </div>
 
+                        {/* Password */}
                         <div className="mt-2">
                             <InputLabel htmlFor="password" className="text-main-blue" value="Password" />
-
                             <TextInput
                                 id="password"
                                 type="password"
-                                name="password"
                                 value={data.password}
                                 className="mt-1 block w-full h-10 text-gray-500"
-                                autoComplete="new-password"
-                                onChange={(e) => setData('password', e.target.value)}
+                                onChange={(e) => handleChange('password', e.target.value)}
                                 placeholder="Masukkan Password"
                                 required
                             />
-
                             <InputError message={errors.password} className="mt-2" />
                         </div>
 
-                        {/* <div className="mt-4">
-                            <InputLabel
-                                htmlFor="password_confirmation"
-                                style={{ color: '#00275d' }}
-                                value="Confirm Password"
-                            />
-
-                            <TextInput
-                                id="password_confirmation"
-                                type="password"
-                                name="password_confirmation"
-                                value={data.password_confirmation}
-                                className="mt-1 block w-full h-10"
-                                autoComplete="new-password"
-                                onChange={(e) =>
-                                    setData('password_confirmation', e.target.value)
-                                }
-                                placeholder="Konfirmasi Password"
-                                required
-                            />
-
-                            <InputError
-                                message={errors.password_confirmation}
-                                className="mt-2"
-                            />
-                        </div> */}
-
                         <div className="mt-4 flex-col items-center justify-center">
-                            <PrimaryButton className="w-full py-2.5 items-center justify-center"  disabled={processing}>
+                            <PrimaryButton className="w-full py-2.5 items-center justify-center">
                                 Register
                             </PrimaryButton>
 
-                            <div className="mt-2 flex justify-center items-center text-gray-600 rounded-md text-sm" >
+                            <div className="mt-2 flex justify-center items-center text-gray-600 rounded-md text-sm">
                                 Sudah punya akun?
                                 <Link href={route('login')}
-                                className=" underline ml-1 hover:text-red-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                style={{ color: '#1E4AE9' }}
+                                    className=" underline ml-1 hover:text-red-900"
+                                    style={{ color: '#1E4AE9' }}
                                 >
-                                Login
+                                    Login
                                 </Link>
                             </div>
                         </div>
@@ -246,12 +238,13 @@ export default function Register() {
                 {/* Foto */}
                 <div className="hidden md:flex items-center justify-center">
                     <img
-                    src={gedung}
-                    alt="Gedung Bea Cukai"
-                    className="rounded-xl object-cover max-h-[90%] max-w-[90%]"/>
+                        src={gedung}
+                        alt="Gedung Bea Cukai"
+                        className="rounded-xl object-cover max-h-[90%] max-w-[90%]"
+                    />
                 </div>
-            </div>
 
+            </div>
 
         </GuestLayout>
     );

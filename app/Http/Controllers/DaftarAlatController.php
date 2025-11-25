@@ -116,8 +116,15 @@ class DaftarAlatController extends Controller
 
     public function listAlatUser()
     {
-        // ambil hanya data penting aja
-        $alat = \App\Models\DaftarAlat::select('id', 'nama_alat', 'foto', 'kategori')->get();
+        $alat = DaftarAlat::select('id', 'nama_alat', 'foto', 'kategori')->get()
+            ->map(function($item) {
+                return [
+                    'id' => $item->id,
+                    'nama_alat' => $item->nama_alat,
+                    'kategori' => $item->kategori,
+                    'foto' => asset('storage/' . $item->foto),
+                ];
+            });
 
         return response()->json(['alats' => $alat]);
     }

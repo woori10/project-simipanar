@@ -1,7 +1,10 @@
+import AlertModalHooks from "@/Components/Hooks/AlertModalHooks";
 import FormLayout from "@/Components/Layout/FormLayout";
+import AlertModal from "@/Components/Modal/AlertModal";
 import SuccessModal from "@/Components/Modal/SuccessModal";
+
 import { Inertia } from "@inertiajs/inertia";
-import { usePage } from '@inertiajs/react';
+import { usePage } from "@inertiajs/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -9,103 +12,122 @@ export default function FormDaftarAlat() {
 
     const { props } = usePage();
     const id = props.id;
+
     const [title, setTitle] = useState("Tambah Alat");
-    const [submitUrl, setSubmitUrl] = useState("/admin/daftar_alat");
+    const [submitUrl, setSubmitUrl] = useState("/admin/daftar-alat");
+
     const [showSuccess, setShowSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
+
+    const { alert, showAlert } = AlertModalHooks();
+
     const [formData, setFormData] = useState({
         nama_alat: "",
-        deskripsi: "",
+        kategori: "",
         foto: null,
+        foto_url: "",
     });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-            const data = new FormData();
-                Object.entries(formData).forEach(([key, value]) => {
-                    if (value !== null) data.append(key, value);
+        if (!formData.nama_alat) {
+            showAlert("Nama alat wajib diisi");
+            return;
+        }
+        if (!formData.kategori) {
+            showAlert("Kategori wajib dipilih");
+            return;
+        }
+        if (!id && !formData.foto) {
+            showAlert("Gambar alat wajib diupload");
+            return;
+        }
+
+        const data = new FormData();
+        Object.entries(formData).forEach(([key, value]) => {
+            if (value !== null) data.append(key, value);
+        });
+
+        try {
+            let res;
+
+            if (id) {
+                res = await axios.post(`/admin/daftar-alat/${id}`, data, {
+                    headers: { "X-HTTP-Method-Override": "PUT" },
                 });
+            } else {
+                res = await axios.post("/admin/daftar-alat", data);
+            }
 
-                try {
-                    let res;
-                    if (id) {
-                        // 🟢 Mode Edit → PUT
-                        res = await axios.post(`/admin/daftar-alat/${id}`, data, {
-                            headers: { "X-HTTP-Method-Override": "PUT" },
-                        });
-                    } else {
-                        // 🟢 Mode Tambah → POST
-                        res = await axios.post("/admin/daftar-alat", data);
-                    }
+            setSuccessMessage(res.data.message);
+            setShowSuccess(true);
 
-                    // tampilkan success modal
-                    setSuccessMessage(res.data.message);
-                    setShowSuccess(true);
+            setTimeout(() => {
+                setShowSuccess(false);
+                Inertia.visit("/admin/kelola-daftar-alat");
+            }, 1500);
 
-                    // timer modal + callback untuk refresh table / close form
-                    setTimeout(() => {
-                        setShowSuccess(false);
-                        Inertia.visit("/admin/kelola-daftar-alat"); // tetap redirect ke table setelah modal
-                    }, 1500);
-                } catch (error) {
-                    console.error("Gagal kirim:", error);
-                }
-        };
+        } catch (error) {
+            console.error("Gagal kirim:", error);
+        }
+    };
+
 
     useEffect(() => {
-        if (id) { // Edit mode
+        if (id) {
             setTitle("Edit Alat");
             setSubmitUrl(`/admin/daftar-alat/${id}`);
 
             axios.get(`/admin/daftar-alat/${id}`)
-            .then((res) => {
-                const alat = res.data;
-                if (alat) {
-                    setFormData({
-                    nama_alat: alat.nama_alat,
-                    kategori: alat.kategori,
-                    foto: null, // untuk file baru nanti
-                    foto_url: alat.foto // simpan URL lama di properti terpisa
-                    });
-                }
-            })
+                .then((res) => {
+                    const alat = res.data;
+                    if (alat) {
+                        setFormData({
+                            nama_alat: alat.nama_alat,
+                            kategori: alat.kategori,
+                            foto: null,
+                            foto_url: alat.foto,
+                        });
+                    }
+                });
         } else {
-            // Tambah mode
             setFormData({
-            nama_alat: "",
-            deskripsi: "",
-            foto: null,
-            foto_url : "",
+                nama_alat: "",
+                kategori: "",
+                foto: null,
+                foto_url: "",
             });
         }
     }, [id]);
 
-    const fields = ([
+    const fields = [
         { label: "Nama Alat", name: "nama_alat", type: "text", placeholder: "Masukkan nama alat" },
-        { label: "Kategori", name: "kategori", type: "select",
+        {
+            label: "Kategori",
+            name: "kategori",
+            type: "select",
             options: [
-            { label: "Alat Deteksi", value: "Alat Deteksi" },
-            { label: "Alat Identifikasi", value: "Alat Identifikasi" },
+                { label: "Alat Deteksi", value: "Alat Deteksi" },
+                { label: "Alat Identifikasi", value: "Alat Identifikasi" },
             ]
-         },
-        { label: "Gambar", name: "foto",  type: "file", accept: "image/*" },
-    ]);
+        },
+        { label: "Gambar", name: "foto", type: "file", accept: "image/*" },
+    ];
 
-  return (
-    <>
-        <FormLayout
-        title={title}
-        fields={fields}
-        formData={formData}
-        submitUrl={submitUrl}
-        setFormData={setFormData}
-        onSubmit={handleSubmit}
-        />
+    return (
+        <>
+            <FormLayout
+                title={title}
+                fields={fields}
+                formData={formData}
+                submitUrl={submitUrl}
+                setFormData={setFormData}
+                onSubmit={handleSubmit}
+            />
 
-        <SuccessModal show={showSuccess} message={successMessage} />
-
-    </>
-
-  );
+            <SuccessModal show={showSuccess} message={successMessage} />
+            <AlertModal show={alert.show} message={alert.message} />
+        </>
+    );
 }

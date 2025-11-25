@@ -18,7 +18,7 @@ export default function ProsedurKerja() {
         {prosedurKerjas.length === 0 ? (
           <p className="text-gray-500">Belum ada prosedur kerja.</p>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {prosedurKerjas.map((item) => (
               <ProsedurKerjaCard
                 key={item.id}
@@ -39,7 +39,7 @@ export default function ProsedurKerja() {
       <div className="flex items-center mb-4">
         <button
           onClick={() => setSelected(null)}
-          className="flex items-center gap-2 py-2 rounded-lg text-gray-700 transition"
+          className="flex items-center gap-2 rounded-lg text-gray-700 transition"
         >
           <ChevronLeftIcon className="h-5 w-5" />
           <span className="font-bold">Kembali</span>

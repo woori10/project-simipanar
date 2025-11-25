@@ -279,11 +279,18 @@ const AppSidebar = () => {
           )}
         </Link>
       </div>
-      {(isExpanded || isHovered || isMobileOpen) && (
-        <h1 className="text-2xl font-extrabold text-main-blue text-center mb-6">
-            ADMIN
-        </h1>
-        )}
+      {/* Desktop */}
+            {(isExpanded || isHovered) && (
+                <h1 className="text-2xl font-extrabold text-main-blue text-center mb-6 lg:block hidden">
+                    ADMIN
+                </h1>
+            )}
+            {/* md & mobile */}
+            {isMobileOpen && (
+                <h1 className="text-2xl font-extrabold text-main-blue text-center mb-6 lg:hidden">
+                    ADMIN
+                </h1>
+            )}
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">

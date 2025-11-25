@@ -141,7 +141,8 @@ class VideoTutorialController extends Controller
 
         return Inertia::render('User/VideoTutorial', [
             'alats' => $alatList,
-            'videos' => $videos,
+            'videos' => [],
+            'selectedAlatId' => null,
         ]);
     }
 

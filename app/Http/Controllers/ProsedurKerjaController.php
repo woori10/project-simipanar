@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProsedurKerja;
 use Illuminate\Http\Request;
+use App\Models\Notification;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,6 +32,12 @@ class ProsedurKerjaController extends Controller
         $prosedur_kerja = ProsedurKerja::create([
             'judul' => $request->judul,
             'dokumen' => $dokumenPath,
+        ]);
+
+        Notification::create([
+            'type'    => 'prosedur_kerja',
+            'message' => 'Prosedur Kerja baru telah ditambahkan: ' . $request->judul,
+            'is_read' => false,
         ]);
 
         return response()->json([

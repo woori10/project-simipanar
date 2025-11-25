@@ -31,7 +31,7 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -42,7 +42,6 @@ class RegisteredUserController extends Controller
             'password' => ['required', Rules\Password::defaults()],
         ]);
 
-        // Simpan ke tabel user_requests, bukan users
         $userRequest = UserRequest::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -50,13 +49,17 @@ class RegisteredUserController extends Controller
             'nip' => $request->nip,
             'no_telp' => $request->no_telp,
             'password' => Hash::make($request->password),
-            'role' => 'user', // default role
+            'role' => 'user',
         ]);
 
-        // Kirim email notifikasi ke user (tunggu approval)
+        // kirim email
         Mail::to($userRequest->email)->send(new UserRequestPending($userRequest));
 
-        // Jangan login otomatis
-        return redirect()->route('login')->with('status', 'Registrasi berhasil! Silakan tunggu konfirmasi admin.');
+        // BALIKKAN JSON, BUKAN REDIRECT
+        return response()->json([
+            'success' => true,
+            'message' => 'Registrasi berhasil! Silakan tunggu konfirmasi admin.'
+        ]);
     }
+
 }

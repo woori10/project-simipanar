@@ -1,3 +1,4 @@
+import Footer from '@/Components/Layout/AppFooter';
 import AppHeader from '@/Components/Layout/AppHeader';
 import AppSidebar from '@/Components/Sidebar/AdminSidebar';
 import { SidebarProvider, useSidebar } from '@/Components/Sidebar/SidebarContext';
@@ -40,14 +41,9 @@ function LayoutContent({ children }) {
         >
         <AppHeader user={auth.user} />
 
-            <main className="p-8 bg-gray-50 flex-1 overflow-y-auto">
+            <main className="p-8 bg-gray-50 flex-1 flex flex-col overflow-y-auto">
                 {children}
-            {/* pass setPageReady ke children
-                {React.Children.map(children, child =>
-                    React.isValidElement(child)
-                    ? React.cloneElement(child, { onPageLoaded: () => setPageReady(true) })
-                    : child
-                )} */}
+                <Footer />
             </main>
         </div>
 

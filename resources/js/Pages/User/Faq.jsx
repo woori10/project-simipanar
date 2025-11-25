@@ -14,7 +14,7 @@ export default function Faq() {
   return (
     <AppLayout>
       <h1 className="text-xl font-bold mb-4">FAQ</h1>
-      <div className="bg-gray-50 min-h-screen">
+      <div className="bg-gray-50">
         <div className="space-y-4">
           {faqs.length === 0 ? (
             <p className="text-gray-500">Belum ada FAQ yang tersedia.</p>

@@ -3,10 +3,29 @@ import AppHeader from '@/Components/Layout/AppHeader';
 import { SidebarProvider, useSidebar } from '@/Components/Sidebar/SidebarContext';
 import AppSidebar from '@/Components/Sidebar/UserSidebar';
 import { usePage } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 
 function LayoutContent({ children }) {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
   const {auth}=usePage().props;
+  const [loading, setLoading] = useState(false);
+  const [pageReady, setPageReady] = useState(false);
+
+    useEffect(() => {
+      const start = () => {
+        setLoading(true);
+        setPageReady(false);
+      };
+
+      document.addEventListener('inertia:start', start);
+      return () => document.removeEventListener('inertia:start', start);
+    }, []);
+
+    useEffect(() => {
+      if (pageReady) {
+        setLoading(false);
+      }
+    }, [pageReady]);
 
 
   return (
@@ -32,9 +51,19 @@ function LayoutContent({ children }) {
         </div>
       </div>
 
-      {/* Footer di bawah */}
+        {loading && (
+        <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-50">
+            <div className="loader">
+                <span> </span>
+                <span> </span>
+                <span> </span>
+            </div> {/* nanti bisa ganti loader keren */}
+        </div>
+        )}
 
     </div>
+
+
   );
 }
 

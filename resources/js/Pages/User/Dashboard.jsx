@@ -3,6 +3,7 @@ import AppLayout from '@/Components/Layout/UserLayout';
 import { Squares2X2Icon } from "@heroicons/react/24/outline";
 import { FAQIcon, ModulDiklatIcon, ProsedurKerjaIcon, UserCircleIcon, VideoTutorialIcon } from "@icons";
 import { useEffect, useState } from 'react';
+import logo from '../../../images/bea-cukai.png';
 
 export default function Dashboard() {
 
@@ -24,14 +25,27 @@ export default function Dashboard() {
 
   return (
     <AppLayout>
-        <h1 className="text-xl font-bold">Dashboard</h1>
+        {/* <h1 className="text-xl font-bold">Dashboard</h1> */}
         <div className= "py-6">
             <div className="rounded-2xl border border-gray-200 bg-main-blue p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-                <h1 className="text-xl text-white font-bold">Informasi</h1>
-                <p className="py-4 text-white">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente repellat autem deserunt, natus earum sequi necessitatibus aut magni repellendus quo! Quo similique repudiandae vero maiores ullam, natus nesciunt? Laborum, odit!
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente repellat autem deserunt, natus earum sequi necessitatibus aut magni repellendus quo! Quo similique repudiandae vero maiores ullam, natus nesciunt? Laborum, odit!
-                </p>
+                <div className='flex flex-row justify-center p-4 text-white lg:items-center gap-4'>
+                    <div className='w-full space-y-4'>
+                            <div className='space-y-2'>
+                                <h1 className="text-4xl font-extrabold">
+                                    Selamat Datang di SIMIPANAR
+                                </h1>
+                                <p className="py-2 text-lg text-white">
+                                    Website ini disediakan khusus untuk pegawai Divisi Dukungan Operasional Narkotika Bea Cukai di seluruh Indonesia.
+                                    Melalui platform ini, Anda dapat mengakses berbagai informasi terkait alat-alat pendukung operasional narkotika,
+                                    mulai dari modul diklat dan videp penggunaan alat.
+                                </p>
+                            </div>
+                        </div>
+                        <div className="hidden lg:flex h-full ">
+                            <img className="w-32 h-auto" src={logo} alt="Logo Kemenkeu" />
+                        </div>
+                </div>
+
             </div>
         </div>
 

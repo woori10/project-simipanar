@@ -1,4 +1,3 @@
-import Footer from '@/Components/Layout/AppFooter';
 import AppHeader from '@/Components/Layout/AppHeader';
 import AppSidebar from '@/Components/Sidebar/AdminSidebar';
 import { SidebarProvider, useSidebar } from '@/Components/Sidebar/SidebarContext';
@@ -43,7 +42,7 @@ function LayoutContent({ children }) {
 
             <main className="p-8 bg-gray-50 flex-1 flex flex-col overflow-y-auto">
                 {children}
-                <Footer />
+                {/* <Footer /> */}
             </main>
         </div>
 

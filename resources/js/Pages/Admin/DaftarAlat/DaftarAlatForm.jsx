@@ -45,19 +45,31 @@ export default function FormDaftarAlat() {
         }
 
         const data = new FormData();
-        Object.entries(formData).forEach(([key, value]) => {
-            if (value !== null) data.append(key, value);
-        });
+
+        // kirim hanya field yang dibutuhkan backend
+        data.append("nama_alat", formData.nama_alat);
+        data.append("kategori", formData.kategori);
+
+        if (formData.foto) {
+            data.append("foto", formData.foto);
+        }
 
         try {
             let res;
 
             if (id) {
                 res = await axios.post(`/admin/daftar-alat/${id}`, data, {
-                    headers: { "X-HTTP-Method-Override": "PUT" },
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        "X-HTTP-Method-Override": "PUT",
+                    },
                 });
             } else {
-                res = await axios.post("/admin/daftar-alat", data);
+                res = await axios.post("/admin/daftar-alat", data, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
             }
 
             setSuccessMessage(res.data.message);
@@ -69,9 +81,10 @@ export default function FormDaftarAlat() {
             }, 1500);
 
         } catch (error) {
-            console.error("Gagal kirim:", error);
+            console.error("Gagal kirim:", error.response?.data || error);
         }
     };
+
 
 
     useEffect(() => {

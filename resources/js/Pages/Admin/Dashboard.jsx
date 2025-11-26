@@ -35,10 +35,10 @@ export default function Dashboard({ title }) {
                     <div className='flex flex-row justify-center p-4 text-white lg:items-center gap-4'>
                         <div className='w-full space-y-4'>
                             <div className='space-y-2'>
-                                <h2 className="text-2xl font-extrabold">
+                                <h2 className="text-3xl font-extrabold">
                                     Selamat Datang di Dashboard
                                 </h2>
-                                <h2 className="text-2xl font-extrabold">
+                                <h2 className="text-3xl font-extrabold">
                                     Admin Simipanar
                                 </h2>
                             </div>

@@ -32,7 +32,14 @@ export default function FormUser() {
         { label: "Email", name: "email", type: "email", placeholder: "Masukkan email" },
         { label: "Satuan Kerja", name: "satker", type: "autocomplete", placeholder: "Masukkan satuan kerja" },
         { label: "No Telp", name: "no_telp", type: "text", placeholder: "Masukkan nomor telepon" },
-        { label: "Role", name: "role", type: "text", placeholder: "Masukkan role" },
+        { label: "Role",
+            name: "role",
+            type: "select",
+            options: [
+                { value: "user", label: "User" },
+                { value: "Admin", label: "Admin" }
+            ],
+            placeholder: "Pilih role" },
         // { label: "Password", name: "password", type: "password", placeholder: "Masukkan password" },
     ]);
 

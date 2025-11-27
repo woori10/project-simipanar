@@ -5,10 +5,11 @@ import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import logo from '../../../images/bea-cukai.png';
 import gedung from '../../../images/gedung_beacukai.jpg';
+import LoaderOverlay from '@/Components/Loader/LoaderOverlay';
 
 export default function Login({ status, canResetPassword }) {
     const { flash } = usePage().props;
@@ -17,6 +18,20 @@ export default function Login({ status, canResetPassword }) {
         password: '',
         remember: false,
     });
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const start = () => setLoading(true);
+        const finish = () => setLoading(false);
+
+        document.addEventListener("inertia:start", start);
+        document.addEventListener("inertia:finish", finish);
+
+        return () => {
+            document.removeEventListener("inertia:start", start);
+            document.removeEventListener("inertia:finish", finish);
+        };
+    }, []);
 
     useEffect(() => {
         Object.entries(flash || {}).forEach(([key, message]) => {
@@ -38,6 +53,7 @@ export default function Login({ status, canResetPassword }) {
 
     return (
         <GuestLayout>
+            <LoaderOverlay show={loading} />
             <Head title="Log in" />
 
             {status && (

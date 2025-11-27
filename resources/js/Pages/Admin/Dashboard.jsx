@@ -94,7 +94,7 @@ export default function Dashboard({ title }) {
                     />
 
                     <DashboardCard
-                        title="Total Requset User"
+                        title="Total Request User"
                         count={0}
                         icon={UserPlusIcon}
                         bgColor="bg-main-yellow"

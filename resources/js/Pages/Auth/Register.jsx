@@ -1,12 +1,13 @@
 import PrimaryButton from '@/Components/Button/PrimaryButton';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
+import LoaderOverlay from "@/Components/Loader/LoaderOverlay";
 import SuccessModal from '@/Components/Modal/SuccessModal';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link } from '@inertiajs/react';
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from '../../../images/bea-cukai.png';
 import gedung from '../../../images/gedung_beacukai.jpg';
 
@@ -89,8 +90,24 @@ export default function Register() {
         setShowSuggestions(false);
     };
 
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const start = () => setLoading(true);
+        const finish = () => setLoading(false);
+
+        document.addEventListener("inertia:start", start);
+        document.addEventListener("inertia:finish", finish);
+
+        return () => {
+            document.removeEventListener("inertia:start", start);
+            document.removeEventListener("inertia:finish", finish);
+        };
+    }, []);
+
     return (
         <GuestLayout>
+            <LoaderOverlay show={loading} />
             <Head title="Register" />
 
             <SuccessModal
